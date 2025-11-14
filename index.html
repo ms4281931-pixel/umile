@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Método Riccus Online</title>
   <meta name="description" content="Aprenda tráfego pago e venda todos os dias com estratégias que transformam negócios no digital.">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-939453756"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'AW-939453756');
+  </script>
+
   <style>
     * {
       margin: 0;
@@ -151,7 +162,6 @@
   <header>
     <h1>Aprenda Tráfego Pago e Venda Todos os Dias 🚀</h1>
     <p>Domine as estratégias que estão transformando negócios no digital.</p>
-    <!-- Botão principal mantido apenas no topo -->
     <a href="https://go.hotmart.com/N102923316C?redirectionUrl=https%3A%2F%2Ftransformaprofissional.com.br%2Fcurso-riccus-de-trafego-pago%2F" class="cta-btn">Quero Aprender Agora</a>
   </header>
 
@@ -170,14 +180,12 @@
     </div>
   </section>
 
-  <!-- Mantido apenas UM botão fixo -->
   <a href="https://go.hotmart.com/N102923316C?redirectionUrl=https%3A%2F%2Ftransformaprofissional.com.br%2Fcurso-riccus-de-trafego-pago%2F" class="fixed-cta">Acessar Curso Agora</a>
 
   <footer>
     <p>© 2025 Umile — Todos os direitos reservados.</p>
   </footer>
 
-  <!-- Popup de saída -->
   <div id="exit-popup">
     <div class="content">
       <h3>Ei! Antes de sair 👋</h3>
@@ -187,7 +195,6 @@
   </div>
 
   <script>
-    // Popup de saída
     let popupShown = false;
     document.addEventListener("mouseout", function(e) {
       if (!popupShown && e.clientY < 10) {
@@ -196,14 +203,12 @@
       }
     });
 
-    // Fecha popup ao clicar fora
     document.getElementById("exit-popup").addEventListener("click", function(e) {
       if (e.target.id === "exit-popup") {
         this.style.display = "none";
       }
     });
 
-    // Botão fixo aparece só após rolar
     const fixedCta = document.querySelector('.fixed-cta');
     window.addEventListener('scroll', () => {
       if (window.scrollY > 250) {
