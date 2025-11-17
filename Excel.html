@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curso de Excel Avançado</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: #081019;
+      color: #ffffff;
+      overflow-x: hidden;
+    }
+
+    header {
+      text-align: center;
+      padding: 50px 20px 30px;
+      max-width: 800px;
+      margin: 0 auto;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+    header h1 {
+      font-size: 2.3rem;
+      background: linear-gradient(90deg, #19c25a, #7dffb4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      margin: 25px 0;
+      background: linear-gradient(90deg, #19c25a, #7dffb4);
+      color: #fff;
+      padding: 14px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.3s ease;
+      font-size: 1.1rem;
+      box-shadow: 0 0 12px rgba(0, 255, 118, 0.4);
+    }
+
+    .cta-btn:hover {
+      transform: scale(1.06);
+      box-shadow: 0 0 22px rgba(0, 255, 118, 0.7);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card {
+      background: #0f1a26;
+      padding: 25px;
+      border-radius: 18px;
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      align-items: flex-start;
+      box-shadow: 0 0 15px rgba(0, 255, 120, 0.12);
+      border: 1px solid rgba(0, 255, 120, 0.15);
+    }
+
+    .card-icon {
+      font-size: 2rem;
+      color: #7dffb4;
+      min-width: 45px;
+    }
+
+    .card h3 {
+      color: #7dffb4;
+      margin-bottom: 8px;
+      font-size: 1.3rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #aaa;
+      padding: 40px 10px 60px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      margin-top: 40px;
+    }
+
+    /* POPUP */
+    #exitPopup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.75);
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    #exitPopup .popup-content {
+      background: #0f172a;
+      padding: 30px;
+      max-width: 400px;
+      text-align: center;
+      border-radius: 16px;
+      box-shadow: 0 0 20px rgba(0, 255, 120, 0.3);
+      animation: popup 0.3s ease;
+    }
+
+    @keyframes popup { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    #exitPopup h3 { color: #7dffb4; margin-bottom: 10px; }
+    #exitPopup p { color: #d0d8f0; margin-bottom: 18px; }
+
+    #closePopup {
+      background: #19c25a;
+      border: none;
+      padding: 12px 30px;
+      color: #fff;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #closePopup:hover { opacity: 0.9; }
+
+  </style>
+</head>
+<body>
+
+<div id="exitPopup">
+  <div class="popup-content">
+    <h3>Espere um pouco! ⚠️</h3>
+    <p>Você ainda não garantiu sua vaga no Curso Avançado de Excel.</p>
+    <a href="https://go.hotmart.com/O17457624C?redirectionUrl=http%3A%2F%2Fwww.desenvolvecursos.com%2Fexcel.html" class="cta-btn">Quero garantir agora</a>
+    <br><br>
+    <button id="closePopup">Fechar</button>
+  </div>
+</div>
+
+<header>
+  <h1>Domine Excel Avançado em Poucos Dias ⚡</h1>
+  <a href="https://go.hotmart.com/O17457624C?redirectionUrl=http%3A%2F%2Fwww.desenvolvecursos.com%2Fexcel.html" class="cta-btn">Acessar o Curso</a>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <div class="card-icon">📜</div>
+    <div>
+      <h3>Certificado Reconhecido</h3>
+      <p>Certificação válida em todo o país conforme a lei nº 9394/96.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">📊</div>
+    <div>
+      <h3>Básico ao Avançado</h3>
+      <p>Aprenda PROCX, PROCV, Tabelas Dinâmicas, Modelos, VBA e muito mais.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">🎥</div>
+    <div>
+      <h3>Aulas Práticas</h3>
+      <p>Videoaulas, PDFs e planilhas para baixar e praticar.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">⏳</div>
+    <div>
+      <h3>Acesso Vitalício</h3>
+      <p>Estude no seu tempo, quando quiser, sem prazo para expirar.</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-icon">🔥</div>
+    <div>
+      <h3>Conteúdos Inclusos</h3>
+      <p>PROC, ÍNDICE, CORRESP, VBA, gráficos, relatórios, automações e mais.</p>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:25px;">
+    <a href="https://go.hotmart.com/O17457624C?redirectionUrl=http%3A%2F%2Fwww.desenvolvecursos.com%2Fexcel.html" class="cta-btn">Quero me inscrever agora</a>
+  </div>
+
+</div>
+
+<footer>
+  © 2025 Umile — Todos os direitos reservados.
+</footer>
+
+<script>
+  let popupShown = false;
+
+  document.addEventListener("mouseout", (e) => {
+    if (e.clientY < 10 && !popupShown) {
+      document.getElementById("exitPopup").style.display = "flex";
+      popupShown = true;
+    }
+  });
+
+  document.getElementById("closePopup").addEventListener("click", () => {
+    document.getElementById("exitPopup").style.display = "none";
+  });
+</script>
+
+</body>
+</html>
