@@ -196,22 +196,22 @@
     <div class="numbers-grid">
 
       <div class="number-box">
-        <div class="number-big counter" data-target="1000000000">+0</div>
+        <div class="number-big counter" data-target="750000000">0</div>
         <p>de pessoas usam Excel no mundo</p>
       </div>
 
       <div class="number-box">
-        <div class="number-big counter" data-target="92">+0%</div>
+        <div class="number-big counter" data-target="60" data-percent="true">0%</div>
         <p>das vagas administrativas exigem Excel</p>
       </div>
 
       <div class="number-box">
-        <div class="number-big counter" data-target="34000">+0</div>
+        <div class="number-big counter" data-target="33000">0</div>
         <p>vagas no Brasil pedem Excel (Indeed / LinkedIn)</p>
       </div>
 
       <div class="number-box">
-        <div class="number-big counter" data-target="38">+0%</div>
+        <div class="number-big counter" data-target="15" data-percent="true">0%</div>
         <p>de aumento na média salarial para quem domina Excel</p>
       </div>
 
@@ -330,21 +330,35 @@
     document.getElementById("exitPopup").style.display = "none";
   });
 
+  // FUNÇÃO PARA FORMATAR EM K/M/B
+  function formatNumber(num) {
+    if (num >= 1e9) return (num / 1e9).toFixed(1).replace('.0', '') + "B";
+    if (num >= 1e6) return (num / 1e6).toFixed(1).replace('.0', '') + "M";
+    if (num >= 1e3) return (num / 1e3).toFixed(1).replace('.0', '') + "k";
+    return num.toString();
+  }
+
   // ANIMAÇÃO DOS NÚMEROS
   function animateNumbers() {
     const counters = document.querySelectorAll(".counter");
     counters.forEach(counter => {
       const target = +counter.getAttribute("data-target");
+      const isPercent = counter.hasAttribute("data-percent");
+
       let current = 0;
       const increment = target / 120;
 
       const updateCounter = () => {
         if (current < target) {
           current += increment;
-          counter.textContent = "+" + Math.floor(current).toLocaleString();
+          counter.textContent = isPercent 
+            ? Math.floor(current) + "%"
+            : formatNumber(Math.floor(current));
           requestAnimationFrame(updateCounter);
         } else {
-          counter.textContent = "+" + target.toLocaleString();
+          counter.textContent = isPercent 
+            ? target + "%"
+            : formatNumber(target);
         }
       };
       updateCounter();
