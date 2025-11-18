@@ -5,23 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Curso de Excel Avançado</title>
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Google tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-939453756"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'AW-939453756');
   </script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
 
     body {
       background: #081019;
@@ -31,7 +25,7 @@
 
     header {
       text-align: center;
-      padding: 50px 20px 30px;
+      padding: 40px 20px 20px;
       max-width: 800px;
       margin: 0 auto;
       animation: fadeIn 0.8s ease;
@@ -45,6 +39,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       font-weight: 700;
+      margin-bottom: 15px;
     }
 
     .cta-btn {
@@ -61,58 +56,80 @@
       box-shadow: 0 0 12px rgba(0, 255, 118, 0.4);
     }
 
-    .cta-btn:hover {
-      transform: scale(1.06);
-      box-shadow: 0 0 22px rgba(0, 255, 118, 0.7);
-    }
+    .cta-btn:hover { transform: scale(1.06); box-shadow: 0 0 22px rgba(0, 255, 118, 0.7); }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+    .container { max-width: 900px; margin: 0 auto; padding: 10px 20px; }
 
-    .card {
+    .group-box {
       background: #0f1a26;
       padding: 25px;
       border-radius: 18px;
-      margin-bottom: 20px;
+      margin: 18px 0;
+      border: 1px solid rgba(0, 255, 120, 0.15);
+      box-shadow: 0 0 15px rgba(0, 255, 120, 0.12);
+    }
+
+    .card {
       display: flex;
       gap: 15px;
       align-items: flex-start;
-      box-shadow: 0 0 15px rgba(0, 255, 120, 0.12);
-      border: 1px solid rgba(0, 255, 120, 0.15);
+      margin-bottom: 18px;
     }
 
-    .card-icon {
-      font-size: 2rem;
-      color: #7dffb4;
-      min-width: 45px;
-    }
+    .card-icon { font-size: 2rem; color: #7dffb4; min-width: 45px; }
+    .card h3 { color: #7dffb4; margin-bottom: 5px; font-size: 1.25rem; }
 
-    .card h3 {
-      color: #7dffb4;
-      margin-bottom: 8px;
-      font-size: 1.3rem;
-    }
-
-    footer {
+    .section-title {
       text-align: center;
-      font-size: 0.85rem;
-      color: #aaa;
-      padding: 40px 10px 60px;
-      border-top: 1px solid rgba(255, 255, 255, 0.06);
-      margin-top: 40px;
+      margin-bottom: 15px;
+      font-size: 1.7rem;
+      background: linear-gradient(90deg, #19c25a, #7dffb4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    ul { list-style: none; padding-left: 0; }
+    li {
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #d0d8f0;
+      font-size: 1rem;
+    }
+
+    /* PROVAS REAIS */
+    .numbers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      margin-top: 15px;
+    }
+
+    .number-box {
+      text-align: center;
+      padding: 20px;
+      border-radius: 16px;
+      background: #0f1a26;
+      border: 1px solid rgba(0,255,120,0.2);
+      box-shadow: 0 0 15px rgba(0,255,120,0.12);
+    }
+
+    .number-big {
+      font-size: 2.2rem;
+      font-weight: 700;
+      background: linear-gradient(90deg, #19c25a, #7dffb4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     /* POPUP */
     #exitPopup {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
       background: rgba(0, 0, 0, 0.75);
       justify-content: center;
       align-items: center;
@@ -129,7 +146,7 @@
       animation: popup 0.3s ease;
     }
 
-    @keyframes popup { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    @keyframes popup { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1); } }
 
     #exitPopup h3 { color: #7dffb4; margin-bottom: 10px; }
     #exitPopup p { color: #d0d8f0; margin-bottom: 18px; }
@@ -143,12 +160,19 @@
       cursor: pointer;
       font-weight: 600;
     }
-    #closePopup:hover { opacity: 0.9; }
 
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #aaa;
+      padding: 40px 10px 60px;
+      margin-top: 30px;
+    }
   </style>
 </head>
 <body>
 
+<!-- EXIT POPUP -->
 <div id="exitPopup">
   <div class="popup-content">
     <h3>Espere um pouco! ⚠️</h3>
@@ -166,44 +190,120 @@
 
 <div class="container">
 
-  <div class="card">
-    <div class="card-icon">📜</div>
-    <div>
-      <h3>Certificado Reconhecido</h3>
-      <p>Certificação válida em todo o país conforme a lei nº 9394/96.</p>
+  <!-- PROVAS REAIS EM NÚMEROS -->
+  <div class="group-box">
+    <h2 class="section-title">Números Reais Que Comprovam a Oportunidade</h2>
+    <div class="numbers-grid">
+
+      <div class="number-box">
+        <div class="number-big counter" data-target="1000000000">0</div>
+        <p>de pessoas usam Excel no mundo</p>
+      </div>
+
+      <div class="number-box">
+        <div class="number-big counter" data-target="92">0%</div>
+        <p>das vagas administrativas exigem Excel</p>
+      </div>
+
+      <div class="number-box">
+        <div class="number-big counter" data-target="34000">0</div>
+        <p>vagas no Brasil pedem Excel (Indeed / LinkedIn)</p>
+      </div>
+
+      <div class="number-box">
+        <div class="number-big counter" data-target="38">0%</div>
+        <p>de aumento na média salarial para quem domina Excel</p>
+      </div>
+
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-icon">📊</div>
-    <div>
-      <h3>Básico ao Avançado</h3>
-      <p>Aprenda PROCX, PROCV, Tabelas Dinâmicas, Modelos, VBA e muito mais.</p>
+  <!-- AGRUPAMENTO: BENEFÍCIOS -->
+  <div class="group-box">
+    <h2 class="section-title">Por Que Este Curso Vale a Pena?</h2>
+
+    <div class="card">
+      <div class="card-icon">📜</div>
+      <div>
+        <h3>Certificado Reconhecido</h3>
+        <p>Certificação válida em todo o país conforme a lei nº 9394/96.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <div>
+        <h3>Básico ao Avançado</h3>
+        <p>Aprenda PROCX, PROCV, Tabelas Dinâmicas, Modelos, VBA e muito mais.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🎥</div>
+      <div>
+        <h3>Aulas Práticas</h3>
+        <p>Videoaulas, PDFs e planilhas para baixar e praticar.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">⏳</div>
+      <div>
+        <h3>Acesso Vitalício</h3>
+        <p>Estude no seu tempo, quando quiser, sem prazo para expirar.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-icon">🔥</div>
+      <div>
+        <h3>Conteúdos Inclusos</h3>
+        <p>PROC, ÍNDICE, CORRESP, VBA, gráficos, relatórios, automações e mais.</p>
+      </div>
     </div>
   </div>
 
-  <div class="card">
-    <div class="card-icon">🎥</div>
-    <div>
-      <h3>Aulas Práticas</h3>
-      <p>Videoaulas, PDFs e planilhas para baixar e praticar.</p>
-    </div>
+  <!-- PARTE: PARA QUEM É -->
+  <div class="group-box">
+    <h2 class="section-title">Para Quem É Este Curso?</h2>
+    <ul>
+      <li>✔ Pessoas que querem aprender Excel de forma prática e direta</li>
+      <li>✔ Quem busca melhorar o currículo para vagas administrativas</li>
+      <li>✔ Quem quer sair do básico e dominar funções essenciais</li>
+      <li>✔ Quem precisa usar Excel no trabalho e ganhar produtividade</li>
+    </ul>
   </div>
 
-  <div class="card">
-    <div class="card-icon">⏳</div>
-    <div>
-      <h3>Acesso Vitalício</h3>
-      <p>Estude no seu tempo, quando quiser, sem prazo para expirar.</p>
-    </div>
+  <!-- PARTE: O QUE VOCÊ VAI APRENDER -->
+  <div class="group-box">
+    <h2 class="section-title">O Que Você Vai Aprender</h2>
+    <ul>
+      <li>✔ Fórmulas básicas e intermediárias</li>
+      <li>✔ Tabelas dinâmicas e dashboards</li>
+      <li>✔ Funções PROCX, PROCV, ÍNDICE e CORRESP</li>
+      <li>✔ Planilhas automatizadas e relatórios</li>
+      <li>✔ Noções de VBA para automação</li>
+    </ul>
   </div>
 
-  <div class="card">
-    <div class="card-icon">🔥</div>
-    <div>
-      <h3>Conteúdos Inclusos</h3>
-      <p>PROC, ÍNDICE, CORRESP, VBA, gráficos, relatórios, automações e mais.</p>
-    </div>
+  <!-- PROVA SOCIAL ÉTICA -->
+  <div class="group-box">
+    <h2 class="section-title">Por Que Este Conhecimento É Importante?</h2>
+    <ul>
+      <li>✔ Empresas no Brasil exigem Excel como requisito básico</li>
+      <li>✔ Milhares de vagas administrativas pedem domínio da ferramenta</li>
+      <li>✔ Saber Excel aumenta oportunidades e diferencia no mercado</li>
+      <li>✔ Aprender agora evita dificuldades em processos seletivos</li>
+    </ul>
+  </div>
+
+  <!-- GARANTIA -->
+  <div class="group-box">
+    <h2 class="section-title">Garantia de 7 Dias</h2>
+    <p style="color:#d0d8f0; font-size:1rem; line-height:1.6;">
+      Você pode acessar o curso, assistir às aulas e testar tudo.  
+      Se dentro de 7 dias você não gostar ou achar que não é pra você, pode pedir seu dinheiro de volta — sem perguntas. Seu risco é zero.
+    </p>
   </div>
 
   <div style="text-align:center; margin-top:25px;">
@@ -229,6 +329,29 @@
   document.getElementById("closePopup").addEventListener("click", () => {
     document.getElementById("exitPopup").style.display = "none";
   });
+
+  // ANIMAÇÃO DOS NÚMEROS
+  function animateNumbers() {
+    const counters = document.querySelectorAll(".counter");
+    counters.forEach(counter => {
+      const target = +counter.getAttribute("data-target");
+      let current = 0;
+      const increment = target / 120;
+
+      const updateCounter = () => {
+        if (current < target) {
+          current += increment;
+          counter.textContent = Math.floor(current).toLocaleString();
+          requestAnimationFrame(updateCounter);
+        } else {
+          counter.textContent = target.toLocaleString();
+        }
+      };
+      updateCounter();
+    });
+  }
+
+  window.addEventListener("load", animateNumbers);
 </script>
 
 </body>
