@@ -196,22 +196,22 @@
     <div class="numbers-grid">
 
       <div class="number-box">
-        <div class="number-big counter" data-target="1000000000">0</div>
+        <div class="number-big counter" data-target="1000000000">+0</div>
         <p>de pessoas usam Excel no mundo</p>
       </div>
 
       <div class="number-box">
-        <div class="number-big counter" data-target="92">0%</div>
+        <div class="number-big counter" data-target="92">+0%</div>
         <p>das vagas administrativas exigem Excel</p>
       </div>
 
       <div class="number-box">
-        <div class="number-big counter" data-target="34000">0</div>
+        <div class="number-big counter" data-target="34000">+0</div>
         <p>vagas no Brasil pedem Excel (Indeed / LinkedIn)</p>
       </div>
 
       <div class="number-box">
-        <div class="number-big counter" data-target="38">0%</div>
+        <div class="number-big counter" data-target="38">+0%</div>
         <p>de aumento na média salarial para quem domina Excel</p>
       </div>
 
@@ -341,10 +341,10 @@
       const updateCounter = () => {
         if (current < target) {
           current += increment;
-          counter.textContent = Math.floor(current).toLocaleString();
+          counter.textContent = "+" + Math.floor(current).toLocaleString();
           requestAnimationFrame(updateCounter);
         } else {
-          counter.textContent = target.toLocaleString();
+          counter.textContent = "+" + target.toLocaleString();
         }
       };
       updateCounter();
