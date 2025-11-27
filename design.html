@@ -198,6 +198,17 @@
     .hero-image{order:-1; min-height:360px}
     .title{font-size:32px}
     .cta-row{flex-wrap:wrap}
+    .hero{padding-right:0; padding-bottom: 24px;} /* Remove padding-right and add bottom padding for mobile */
+    .stats{flex-wrap: wrap; gap: 12px;} /* Allow stats to wrap and reduce gap */
+    .stat{min-width: unset; flex-grow: 1;} /* Allow stats to grow to fill space */
+  }
+
+  @media (max-width:500px){
+    .wrap{padding: 20px;} /* Smaller padding for very small screens */
+    .title{font-size: 28px;} /* Smaller title for very small screens */
+    .hero-image{min-height: 280px;} /* Smaller image height for very small screens */
+    .stats{flex-direction: column; gap: 10px;} /* Stack stats vertically on very small screens */
+    .stat{min-width: 100%;} /* Full width for stacked stats */
   }
 
   .pop{
