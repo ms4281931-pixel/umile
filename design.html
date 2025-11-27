@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Matheus Ollivers — Designer Gráfico</title>
+<meta name="description" content="Matheus Ollivers — Designer Gráfico (6 anos). Portfólio e contato." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --blue1:#1e88ff;
+    --blue2:#3aa0ff;
+    --text:#0b1220;
+    --muted:#6b7280;
+    --glass: rgba(255,255,255,0.6);
+    --card-shadow: 0 8px 30px rgba(15,23,42,0.06);
+    --radius:16px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+  }
+
+  .wrap{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:32px;
+    align-items:stretch;
+    padding:48px;
+    max-width:1300px;
+    margin:0 auto;
+  }
+
+  .hero{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:22px;
+    padding-right:24px;
+  }
+
+  .eyebrow{
+    display:inline-flex;
+    gap:10px;
+    align-items:center;
+    font-size:13px;
+    color:var(--muted);
+    font-weight:600;
+    letter-spacing:0.6px;
+  }
+
+  .title{
+    font-size:44px;
+    line-height:1.02;
+    margin:0;
+    letter-spacing:-0.02em;
+    font-weight:800;
+    background: linear-gradient(90deg,var(--blue1),var(--blue2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .subtitle{
+    color:var(--muted);
+    font-size:16px;
+    max-width:55ch;
+  }
+
+  .cta-row{
+    display:flex;
+    gap:14px;
+    align-items:center;
+    margin-top:6px;
+  }
+
+  .btn{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 18px;
+    font-weight:700;
+    font-size:15px;
+    border-radius:12px;
+    text-decoration:none;
+    color:white;
+    background:linear-gradient(90deg,var(--blue1),var(--blue2));
+    box-shadow: 0 8px 22px rgba(32,124,255,0.12), 0 2px 6px rgba(2,6,23,0.06);
+    transform: translateZ(0);
+    transition: transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+    will-change: transform;
+    display:inline-flex;
+  }
+  .btn:active{ transform: translateY(2px) scale(.997) }
+  .btn svg{ width:18px; height:18px; display:block; flex-shrink:0; }
+
+  .btn.floating{
+    animation: float 6s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%{ transform: translateY(0) }
+    50%{ transform: translateY(-8px) }
+    100%{ transform: translateY(0) }
+  }
+
+  .btn.ghost{
+    background: linear-gradient(180deg, rgba(26,115,232,0.06), rgba(58,160,255,0.03));
+    color:var(--blue1);
+    box-shadow:none;
+    border:1px solid rgba(30,136,229,0.08);
+    font-weight:700;
+  }
+
+  .stats{
+    display:flex;
+    gap:18px;
+    margin-top:22px;
+    align-items:center;
+  }
+  .stat{
+    background:linear-gradient(180deg, rgba(34,139,230,0.04), rgba(255,255,255,0.02));
+    padding:14px 18px;
+    border-radius:12px;
+    min-width:120px;
+    text-align:center;
+    box-shadow:var(--card-shadow);
+    position:relative;
+    overflow:visible;
+  }
+  .stat .num{
+    font-weight:800;
+    font-size:24px;
+    letter-spacing:-0.02em;
+    color:var(--blue1);
+    display:inline-block;
+    transform-origin:center;
+    transition:transform .25s ease, opacity .25s;
+  }
+  .stat .label{
+    display:block;
+    margin-top:6px;
+    font-size:12px;
+    color:var(--muted);
+    font-weight:600;
+  }
+
+  .hero-image{
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow: 0 18px 60px rgba(8,20,60,0.08);
+    position:relative;
+    min-height:520px;
+  }
+  .hero-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .badge{
+    position:absolute;
+    right:22px;
+    top:22px;
+    background:linear-gradient(90deg,var(--blue2),var(--blue1));
+    color:white;
+    padding:8px 12px;
+    font-weight:700;
+    border-radius:999px;
+    box-shadow:0 8px 30px rgba(12,74,204,0.18);
+    transform:translateY(0);
+    animation: badgeFloat 5s ease-in-out infinite;
+    display:flex;
+    gap:10px;
+    align-items:center;
+    font-size:13px;
+  }
+  @keyframes badgeFloat{
+    0%{ transform: translateY(0) rotate(-1deg) }
+    50%{ transform: translateY(-10px) rotate(2deg) }
+    100%{ transform: translateY(0) rotate(-1deg) }
+  }
+
+  @media (max-width:980px){
+    .wrap{grid-template-columns:1fr; padding:28px}
+    .hero-image{order:-1; min-height:360px}
+    .title{font-size:32px}
+    .cta-row{flex-wrap:wrap}
+  }
+
+  .pop{
+    animation: popOut .5s cubic-bezier(.2,.9,.3,1);
+  }
+  @keyframes popOut{
+    0%{ transform: scale(1); opacity:1}
+    40%{ transform: scale(1.12); opacity:1}
+    100%{ transform: scale(0); opacity:0}
+  }
+
+  .fade-in{
+    opacity:0;
+    transform: translateY(10px);
+    animation: enter .7s forwards ease-out;
+  }
+  .fade-in.delay-1{ animation-delay:.12s }
+  .fade-in.delay-2{ animation-delay:.18s }
+  @keyframes enter{
+    to{opacity:1; transform:translateY(0)}
+  }
+
+  .btn:focus{ outline:3px solid rgba(30,136,229,0.18); outline-offset:3px; border-radius:10px }
+
+  /* POPUP DE SAÍDA */
+  #exit-popup{
+    position:fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background:rgba(0,0,0,0.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .3s;
+    z-index:999;
+  }
+  #exit-popup.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+  #exit-popup .box{
+    background:white;
+    padding:28px;
+    border-radius:16px;
+    text-align:center;
+    max-width:360px;
+    box-shadow:0 18px 40px rgba(0,0,0,0.14);
+  }
+  #exit-popup .box h2{
+    margin:0 0 12px;
+    font-size:22px;
+    font-weight:800;
+  }
+  #exit-popup a{
+    display:inline-block;
+    margin-top:14px;
+    padding:12px 22px;
+    border-radius:10px;
+    background:linear-gradient(90deg,var(--blue1),var(--blue2));
+    color:white;
+    font-weight:700;
+    text-decoration:none;
+  }
+</style>
+</head>
+<body>
+
+<main class="wrap" role="main">
+  <section class="hero">
+    <div class="eyebrow fade-in delay-1">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2v20M2 12h20" stroke="#1e88ff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Designer Gráfico • Matheus Ollivers</span>
+    </div>
+
+    <h1 class="title fade-in delay-1">Design minimalista. Luxo funcional.</h1>
+
+    <p class="subtitle fade-in delay-2">
+      Me chamo Matheus, sou Designer Gráfico há 6 anos e tenho 28 anos.<br><br>
+      Atualmente atuo na Indústria de Móveis América, desenvolvendo materiais para uma linha de móveis de luxo com foco em design sofisticado, minimalista e elegante.
+    </p>
+
+    <div class="cta-row fade-in delay-2">
+      <a class="btn floating" href="https://www.behance.net/matheusollivers" target="_blank">Portfólio</a>
+
+      <!-- ÍCONE WHATSAPP ADICIONADO -->
+      <a class="btn ghost floating" href="https://wa.me/35998707827" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.78 11.78 0 0 0 12 0a11.93 11.93 0 0 0-7.06 2.27A12 12 0 0 0 0 12a11.87 11.87 0 0 0 1.76 6.17L0 24l6.09-1.6A12 12 0 0 0 12 24h.01A11.94 11.94 0 0 0 24 12a11.78 11.78 0 0 0-3.48-8.52ZM12 21.8a9.74 9.74 0 0 1-4.94-1.35l-.35-.2-3.62.95 1-3.52-.23-.36A9.78 9.78 0 0 1 2.2 12a10 10 0 1 1 9.8 9.8Zm5.45-7.33c-.3-.15-1.77-.87-2.05-.97s-.48-.15-.68.15-.78.97-.95 1.17-.35.22-.65.07a8.07 8.07 0 0 1-2.38-1.47 9 9 0 0 1-1.67-2.1c-.17-.3 0-.46.13-.61.13-.13.3-.35.45-.52s.2-.3.3-.5a.56.56 0 0 0 0-.52c-.08-.15-.68-1.64-.93-2.25s-.5-.52-.68-.52h-.58a1.1 1.1 0 0 0-.78.36 3.23 3.23 0 0 0-1 2.4 5.6 5.6 0 0 0 1.2 3.07 12.63 12.63 0 0 0 4.85 4.14c2.88 1.23 2.88.82 3.4.77a3 3 0 0 0 2-1.42 2.44 2.44 0 0 0 .17-1.42c-.1-.1-.25-.15-.55-.3Z"></path></svg>
+        WhatsApp
+      </a>
+
+      <a class="btn" href="https://www.behance.net/matheusollivers" target="_blank">Ver trabalhos</a>
+    </div>
+
+    <div class="stats fade-in delay-2">
+      <div class="stat"><span class="num" data-target="6">+0</span><span class="label">Anos de experiência</span></div>
+      <div class="stat"><span class="num" data-target="50">+0</span><span class="label">Projetos</span></div>
+      <div class="stat"><span class="num" data-target="35">+0</span><span class="label">Clientes</span></div>
+    </div>
+  </section>
+
+  <aside class="hero-image">
+    <div class="badge">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 6 .5-4.5 4 1 6L12 17l-5.5 2.5 1-6L3 8.5 9 8 12 2z" fill="rgba(255,255,255,0.12)"/></svg>
+      Estúdio Criativo
+    </div>
+
+    <img src="hero.jpg" alt="Foto do Matheus — Designer Gráfico" />
+
+    <a href="https://www.behance.net/matheusollivers" target="_blank" style="position:absolute;left:22px;bottom:22px;background:rgba(255,255,255,0.9);padding:10px 14px;border-radius:12px;font-weight:700;text-decoration:none;color:#0b1220;">Ver portfólio</a>
+  </aside>
+</main>
+
+<!-- POPUP DE SAÍDA -->
+<div id="exit-popup">
+  <div class="box">
+    <h2>Antes de sair…</h2>
+    <p>Gostaria de ver meus trabalhos completos no Behance?</p>
+    <a href="https://www.behance.net/matheusollivers" target="_blank">Ver Portfólio</a>
+  </div>
+</div>
+
+<script>
+document.addEventListener("mouseleave", function(e){
+  if(e.clientY <= 0){
+    document.getElementById("exit-popup").classList.add("active");
+  }
+});
+
+// Script para a contagem animada
+const stats = document.querySelectorAll('.stat .num');
+
+const animateCount = (el) => {
+  const target = parseInt(el.getAttribute('data-target'));
+  const prefix = el.textContent.includes('+') ? '+' : '';
+  const duration = 1500; // 1.5 segundos
+  let start = 0;
+  let startTime = null;
+
+  const step = (timestamp) => {
+    if (!startTime) startTime = timestamp;
+    const progress = timestamp - startTime;
+    const current = Math.min(progress / duration, 1);
+    const value = Math.floor(current * target);
+
+    el.textContent = prefix + value;
+
+    if (current < 1) {
+      window.requestAnimationFrame(step);
+    } else {
+      el.textContent = prefix + target;
+    }
+  };
+
+  window.requestAnimationFrame(step);
+};
+
+// Observador para iniciar a animação quando o elemento entrar na viewport
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animateCount(entry.target);
+      observer.unobserve(entry.target); // Para a animação após a primeira execução
+    }
+  });
+}, {
+  threshold: 0.5 // Inicia quando 50% do elemento estiver visível
+});
+
+stats.forEach(stat => {
+  observer.observe(stat);
+});
+</script>
+
+</body>
+</html>
