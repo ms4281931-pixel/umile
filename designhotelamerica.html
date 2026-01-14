@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Hotel América</title>
+
+  <style>
+    :root {
+      --black: #000000;
+      --gray: #6b6b6b;
+      --light: #f7f7f7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background-color: #ffffff;
+      color: var(--black);
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+
+    main {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 64px 20px 48px;
+    }
+
+    /* HERO */
+    .hero {
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      text-align: left; /* Mantém o texto justificado à esquerda */
+      display: inline-block; /* Permite que o container se ajuste ao texto */
+      margin: 0 auto; /* Centraliza o container do título na tela */
+      animation: fadeUp 1s ease forwards;
+    }
+
+    h1 span {
+      display: block;
+    }
+
+    .subtitle {
+      max-width: 620px;
+      font-size: 1rem;
+      color: var(--gray);
+      text-align: center;
+      animation: fadeUp 1.2s ease forwards;
+    }
+
+    /* BOTÕES */
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px 28px;
+      border: 1px solid #000;
+      background: transparent;
+      color: #000;
+      text-decoration: none;
+      font-size: 0.9rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: all 0.35s ease;
+      min-width: 260px;
+    }
+
+    .btn:hover {
+      background: #000;
+      color: #fff;
+    }
+
+    .btn svg {
+      stroke: currentColor;
+    }
+
+    /* FLOATING */
+    .floating {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 999;
+    }
+
+    .float-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 14px;
+      transition: transform 0.3s ease;
+    }
+
+    .float-btn:hover {
+      transform: scale(1.08);
+    }
+
+    footer {
+      margin-top: 64px; /* Aumentado de 32px para 64px para melhor espaçamento */
+      margin-bottom: 48px; /* Adicionado espaçamento inferior */
+      display: flex;
+      justify-content: center;
+    }
+
+    footer img {
+      width: 140px;
+      opacity: 0.9;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (min-width: 768px) {
+      .buttons {
+        flex-direction: row;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <section class="hero">
+      <h1>
+        <span>design</span>
+        <span>hotel</span>
+        <span>américa</span>
+      </h1>
+
+      <p class="subtitle">
+        Mobiliário contemporâneo para hotelaria, arquitetura e projetos de alto padrão.
+        Acesse nossos canais institucionais e arquivos técnicos exclusivos.
+      </p>
+
+      <div class="buttons">
+        <a class="btn" href="https://www.instagram.com/americamoveis" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="18" cy="6" r="1"/></svg>
+          Instagram
+        </a>
+        <a class="btn" href="https://www.americamoveis.com/" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 0 20"/><path d="M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+          Site Oficial
+        </a>
+        <a class="btn" href="https://www.americamoveis.com/login/?produto/brutt/" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4a2 2 0 0 0 1-1.73z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+          Arquivos 3D
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div class="floating">
+    <a class="float-btn" href="https://www.instagram.com/americamoveis" target="_blank">IG</a>
+    <a class="float-btn" href="https://www.americamoveis.com/" target="_blank">🌐</a>
+  </div>
+
+  <footer>
+    <img src="https://i.ibb.co/mrZYYdst/Sem-t-tulo-3.png" alt="Design Hotel América" />
+  </footer>
+
+</body>
+</html>
