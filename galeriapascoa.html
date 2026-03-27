@@ -49,10 +49,10 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
   </div>
 </div>
 
-<!-- Firebase SDKs (sem type="module" para GitHub Pages funcionar fácil) -->
-<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-storage.js"></script>
+<!-- Firebase compat SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-storage-compat.js"></script>
 
 <script>
   // Configuração do Firebase
@@ -84,66 +84,72 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
       return;
     }
 
-    // Nome único para evitar sobrescrever
     const nomeArquivo = Date.now() + '_' + file.name;
     const storageRef = storage.ref('imagens/' + nomeArquivo);
 
-    await storageRef.put(file);
-    const url = await storageRef.getDownloadURL();
-
-    await db.collection('galeriaPascoa').add({
-      nome, setor, empresa,
-      img: url,
-      votos: 0
+    // Upload da imagem
+    storageRef.put(file).then(() => {
+      storageRef.getDownloadURL().then((url) => {
+        // Salvar no Firestore
+        db.collection('galeriaPascoa').add({
+          nome, setor, empresa,
+          img: url,
+          votos: 0
+        }).then(() => {
+          // Limpar campos e atualizar galeria
+          document.getElementById('nome').value = '';
+          document.getElementById('setor').value = '';
+          document.getElementById('empresa').value = '';
+          document.getElementById('imagem').value = '';
+          render();
+        });
+      });
     });
-
-    render();
-    document.getElementById('nome').value = '';
-    document.getElementById('setor').value = '';
-    document.getElementById('empresa').value = '';
-    document.getElementById('imagem').value = '';
   });
 
   // Votar
-  async function votar(docId){
+  function votar(docId){
     if(votosUsuario.includes(docId)) return;
 
     const docRef = db.collection('galeriaPascoa').doc(docId);
-    const docSnap = await docRef.get();
-    if(docSnap.exists){
-      await docRef.update({ votos: docSnap.data().votos + 1 });
-      votosUsuario.push(docId);
-      localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
-      render();
-    }
+    docRef.get().then((docSnap)=>{
+      if(docSnap.exists){
+        docRef.update({ votos: docSnap.data().votos + 1 }).then(()=>{
+          votosUsuario.push(docId);
+          localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
+          render();
+        });
+      }
+    });
   }
 
   // Renderizar galeria
-  async function render(){
+  function render(){
     const galeriaDiv = document.getElementById('galeria');
     galeriaDiv.innerHTML = '';
 
-    const snapshot = await db.collection('galeriaPascoa').get();
-    let dados = [];
-    snapshot.forEach(doc => dados.push({id: doc.id, ...doc.data()}));
+    db.collection('galeriaPascoa').get().then(snapshot=>{
+      let dados = [];
+      snapshot.forEach(doc => dados.push({id: doc.id, ...doc.data()}));
 
-    dados.forEach(item=>{
-      const jaVotou = votosUsuario.includes(item.id);
-      galeriaDiv.innerHTML += `
-        <div class="card">
-          <img src="${item.img}">
-          <p><b>${item.nome}</b></p>
-          <p>${item.setor}</p>
-          <p>${item.empresa}</p>
-          <p>⭐ ${item.votos}</p>
-          <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar('${item.id}')">
-            ${jaVotou ? 'Já votou' : 'Votar'}
-          </button>
-        </div>
-      `;
+      dados.forEach(item=>{
+        const jaVotou = votosUsuario.includes(item.id);
+        galeriaDiv.innerHTML += `
+          <div class="card">
+            <img src="${item.img}">
+            <p><b>${item.nome}</b></p>
+            <p>${item.setor}</p>
+            <p>${item.empresa}</p>
+            <p>⭐ ${item.votos}</p>
+            <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar('${item.id}')">
+              ${jaVotou ? 'Já votou' : 'Votar'}
+            </button>
+          </div>
+        `;
+      });
+
+      renderRanking(dados);
     });
-
-    renderRanking(dados);
   }
 
   function renderRanking(dados){
@@ -161,7 +167,7 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
     });
   }
 
-  // Inicializa render
+  // Inicializa galeria
   render();
 </script>
 
