@@ -70,7 +70,7 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
 
   let votosUsuario = JSON.parse(localStorage.getItem('votosUsuario')) || [];
 
-  // Enviar foto
+  // Enviar foto com compressão
   document.getElementById('btnEnviar').addEventListener('click', () => {
     const nome = document.getElementById('nome').value;
     const setor = document.getElementById('setor').value;
@@ -84,20 +84,33 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
 
     const reader = new FileReader();
     reader.onload = function(e){
-      const imgBase64 = e.target.result;
+      const img = new Image();
+      img.onload = function(){
+        const canvas = document.createElement('canvas');
+        const maxWidth = 400;
+        const scaleSize = maxWidth / img.width;
+        canvas.width = maxWidth;
+        canvas.height = img.height * scaleSize;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        const imgBase64 = canvas.toDataURL('image/jpeg', 0.7);
 
-      db.collection('galeriaPascoa').add({
-        nome, setor, empresa,
-        img: imgBase64,
-        votos: 0
-      }).then(()=>{
-        document.getElementById('nome').value = '';
-        document.getElementById('setor').value = '';
-        document.getElementById('empresa').value = '';
-        document.getElementById('imagem').value = '';
-        render();
-      });
-    }
+        db.collection('galeriaPascoa').add({
+          nome, setor, empresa,
+          img: imgBase64,
+          votos: 0
+        }).then(()=>{
+          document.getElementById('nome').value = '';
+          document.getElementById('setor').value = '';
+          document.getElementById('empresa').value = '';
+          document.getElementById('imagem').value = '';
+          render();
+        }).catch(err=>{
+          alert('Erro ao enviar imagem: ' + err);
+        });
+      };
+      img.src = e.target.result;
+    };
     reader.readAsDataURL(file);
   });
 
@@ -161,7 +174,6 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
     });
   }
 
-  // Inicializa galeria
   render();
 </script>
 
