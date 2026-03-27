@@ -52,7 +52,6 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
 <!-- Firebase compat SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-storage-compat.js"></script>
 
 <script>
   // Configuração do Firebase
@@ -68,12 +67,11 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
   // Inicializar Firebase
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
-  const storage = firebase.storage();
 
   let votosUsuario = JSON.parse(localStorage.getItem('votosUsuario')) || [];
 
   // Enviar foto
-  document.getElementById('btnEnviar').addEventListener('click', async () => {
+  document.getElementById('btnEnviar').addEventListener('click', () => {
     const nome = document.getElementById('nome').value;
     const setor = document.getElementById('setor').value;
     const empresa = document.getElementById('empresa').value;
@@ -84,27 +82,23 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
       return;
     }
 
-    const nomeArquivo = Date.now() + '_' + file.name;
-    const storageRef = storage.ref('imagens/' + nomeArquivo);
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const imgBase64 = e.target.result;
 
-    // Upload da imagem
-    storageRef.put(file).then(() => {
-      storageRef.getDownloadURL().then((url) => {
-        // Salvar no Firestore
-        db.collection('galeriaPascoa').add({
-          nome, setor, empresa,
-          img: url,
-          votos: 0
-        }).then(() => {
-          // Limpar campos e atualizar galeria
-          document.getElementById('nome').value = '';
-          document.getElementById('setor').value = '';
-          document.getElementById('empresa').value = '';
-          document.getElementById('imagem').value = '';
-          render();
-        });
+      db.collection('galeriaPascoa').add({
+        nome, setor, empresa,
+        img: imgBase64,
+        votos: 0
+      }).then(()=>{
+        document.getElementById('nome').value = '';
+        document.getElementById('setor').value = '';
+        document.getElementById('empresa').value = '';
+        document.getElementById('imagem').value = '';
+        render();
       });
-    });
+    }
+    reader.readAsDataURL(file);
   });
 
   // Votar
@@ -112,7 +106,7 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
     if(votosUsuario.includes(docId)) return;
 
     const docRef = db.collection('galeriaPascoa').doc(docId);
-    docRef.get().then((docSnap)=>{
+    docRef.get().then(docSnap=>{
       if(docSnap.exists){
         docRef.update({ votos: docSnap.data().votos + 1 }).then(()=>{
           votosUsuario.push(docId);
