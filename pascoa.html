@@ -1,118 +1,359 @@
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-const firebaseConfig = {
-  apiKey: "AIzaSyCoSRQNZNIfSZq8db0XG-sZui1jxnNLBEU",
-  authDomain: "pascoagovernanca.firebaseapp.com",
-  projectId: "pascoagovernanca",
-  storageBucket: "pascoagovernanca.firebasestorage.app",
-  messagingSenderId: "1014731249644",
-  appId: "1:1014731249644:web:347ec3f10573973956d2c9"
-};
+<title>Easter Tech Hunt</title>
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+<link rel="icon" type="image/png" href="https://i.ibb.co/sJk3rC10/freepik-preciso-dessa-imagem-em-png-sem-fundo-0001.png">
 
-let votosUsuario = JSON.parse(localStorage.getItem('votosUsuario')) || [];
-
-function salvarLocal(){
-  localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
 }
 
-async function enviar(){
-  const nome = document.getElementById('nome').value;
-  const setor = document.getElementById('setor').value;
-  const empresa = document.getElementById('empresa').value;
-  const file = document.getElementById('imagem').files[0];
-
-  if(!nome || !setor || !empresa || !file){
-    alert('Preencha tudo');
-    return;
-  }
-
-  const reader = new FileReader();
-  reader.onload = async function(e){
-    await addDoc(collection(db, "fotos"), {
-      nome,
-      setor,
-      empresa,
-      img: e.target.result,
-      votos: 0
-    });
-    carregar();
-  }
-  reader.readAsDataURL(file);
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  position:relative;
+  color:#fff;
 }
 
-async function votar(id){
-  if(votosUsuario.includes(id)) return;
+/* 🎥 VÍDEO FIXO */
+.bg-video{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-3;
+  filter:brightness(0.5);
+  pointer-events:none;
+}
 
-  const ref = doc(db, "fotos", id);
-  const snapshot = await getDocs(collection(db, "fotos"));
+/* OVERLAY */
+body::after{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  z-index:-2;
+  background:rgba(0,0,0,0.5);
+}
 
-  snapshot.forEach(async (d)=>{
-    if(d.id === id){
-      const dados = d.data();
-      await updateDoc(ref, { votos: dados.votos + 1 });
+.container{
+  position:relative;
+  z-index:1;
+  width:95%;
+  max-width:500px;
+  padding:30px;
+  border-radius:25px;
+  background:rgba(10,10,30,0.65);
+  backdrop-filter:blur(15px);
+  box-shadow:0 0 30px rgba(0,255,200,0.2);
+  text-align:center;
+}
+
+/* Ajuste específico para a etapa da grade para permitir que ela cresça se necessário */
+#step3.container {
+  max-width: 600px;
+  padding: 20px;
+}
+
+h1{
+    color:#00ffd0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+/* Estilo para o ícone do título */
+.title-icon {
+    width: 40px;
+    height: 40px;
+    background: url('https://i.ibb.co/sJk3rC10/freepik-preciso-dessa-imagem-em-png-sem-fundo-0001.png') center/contain no-repeat;
+    display: inline-block;
+}
+
+p{color:#ccc;margin-bottom:20px;}
+
+.btn{
+  background:linear-gradient(45deg,#00ffd0,#7a2bff);
+  border:none;
+  padding:14px;
+  border-radius:40px;
+  cursor:pointer;
+  width:100%;
+  margin:6px 0;
+  color:#fff;
+}
+
+.btn:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 20px #00ffd0;
+}
+
+.hidden{display:none;}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:10px;
+  margin-top: 20px;
+}
+
+/* Responsividade para Mobile */
+@media (max-width: 480px) {
+  .grid {
+    gap: 5px;
+  }
+  .egg {
+    width: 45px !important;
+    height: 60px !important;
+  }
+  #step3.container {
+    padding: 15px;
+  }
+  h1 { font-size: 1.5rem; }
+  .title-icon { width: 30px; height: 30px; }
+}
+
+.egg{
+  width:60px;
+  height:80px;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  cursor:pointer;
+  transition:0.3s;
+  margin:auto;
+  filter:drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+}
+
+.egg:hover{
+  transform:scale(1.2) rotate(5deg);
+}
+
+/* Classes para os diferentes ícones */
+.icon-egg { background-image: url('https://i.ibb.co/sJk3rC10/freepik-preciso-dessa-imagem-em-png-sem-fundo-0001.png'); }
+.icon-bunny { background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310419663032377326/GvNRRXBABHtNRBQR.png'); }
+.icon-chocolate { background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310419663032377326/rmDMOAFEVlXbpygU.png'); }
+.icon-carrot { background-image: url('https://files.manuscdn.com/user_upload_by_module/session_file/310419663032377326/KrZnxTVIoXyZBfwK.png'); }
+
+/* Animações de flutuação variadas */
+.egg:nth-child(4n+1){ animation:float1 3s ease-in-out infinite; }
+.egg:nth-child(4n+2){ animation:float2 3.5s ease-in-out infinite; }
+.egg:nth-child(4n+3){ animation:float3 4s ease-in-out infinite; }
+.egg:nth-child(4n){ animation:float4 3.2s ease-in-out infinite; }
+
+@keyframes float1{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes float2{0%,100%{transform:translateX(0);}50%{transform:translateX(8px);}}
+@keyframes float3{0%,100%{transform:translate(0,0);}50%{transform:translate(-6px,-6px);}}
+@keyframes float4{0%,100%{transform:translate(0,0);}50%{transform:translate(6px,-6px);}}
+
+.feedback{
+  margin-top:15px;
+  min-height: 24px;
+  color:#00ffd0;
+  font-weight: bold;
+}
+
+.loader{
+  width:40px;
+  height:40px;
+  border:4px solid rgba(255,255,255,0.2);
+  border-top:4px solid #00ffd0;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:20px auto;
+}
+
+@keyframes spin{
+  100%{transform:rotate(360deg);}
+}
+
+/* Controle de áudio visual (opcional) */
+.audio-control {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    background: rgba(10,10,30,0.8);
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 1px solid #00ffd0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎥 VÍDEO -->
+<video autoplay muted loop playsinline class="bg-video">
+  <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4?token=exp=1774742400~hmac=dd265f6cdfd621de05c13421667bed2930f2fb692a2bf5333147c0b5c82f1d7a" type="video/mp4">
+</video>
+
+<!-- 🎵 ÁUDIO -->
+<audio id="bgMusic" loop>
+  <source src="https://soundimage.org/wp-content/uploads/2014/10/Light-Years_v001.mp3" type="audio/mpeg">
+</audio>
+<audio id="clickSound">
+  <source src="https://www.soundjay.com/buttons/sounds/button-20.mp3" type="audio/mpeg">
+</audio>
+<audio id="winSound">
+  <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3" type="audio/mpeg">
+</audio>
+
+<div class="audio-control" onclick="toggleMusic()" title="Ligar/Desligar Música">
+    <span id="musicIcon">🔇</span>
+</div>
+
+<div class="container" id="step1">
+  <h1><span class="title-icon"></span> Easter Tech Hunt</h1>
+  <p>Encontre o ovo premiado e ganhe até R$300</p>
+  <button class="btn" onclick="startHunt()">Começar</button>
+</div>
+
+<div class="container hidden" id="step2">
+  <h1>💭 Sua Páscoa ideal?</h1>
+  <button class="btn" onclick="nextStep(2)">Chocolate</button>
+  <button class="btn" onclick="nextStep(2)">Família</button>
+  <button class="btn" onclick="nextStep(2)">Descanso</button>
+</div>
+
+<div class="container hidden" id="step3">
+  <h1><span class="title-icon"></span> Encontre o premiado</h1>
+
+  <div class="grid" id="eggGrid">
+    <!-- Grid será gerada via JavaScript -->
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+</div>
+
+<div class="container hidden" id="step4">
+  <h1>🔓 Liberando acesso...</h1>
+  <div class="loader"></div>
+</div>
+
+<div class="container hidden" id="step5">
+  <h1>🎉 Você entrou no concurso!</h1>
+  <p>Envie sua foto e concorra a R$300</p>
+  <button class="btn" onclick="resgatar()">Participar</button>
+</div>
+
+<script>
+const bgMusic = document.getElementById('bgMusic');
+const clickSound = document.getElementById('clickSound');
+const winSound = document.getElementById('winSound');
+const musicIcon = document.getElementById('musicIcon');
+
+function playClick() {
+    clickSound.currentTime = 0;
+    clickSound.play().catch(e => console.log("Erro ao tocar som:", e));
+}
+
+function toggleMusic() {
+    if (bgMusic.paused) {
+        bgMusic.play();
+        musicIcon.innerText = "🔊";
+    } else {
+        bgMusic.pause();
+        musicIcon.innerText = "🔇";
     }
-  });
-
-  votosUsuario.push(id);
-  salvarLocal();
-  carregar();
 }
 
-async function carregar(){
-  const galeria = document.getElementById('galeria');
-  galeria.innerHTML = '';
-
-  const querySnapshot = await getDocs(collection(db, "fotos"));
-  let dados = [];
-
-  querySnapshot.forEach((docSnap)=>{
-    dados.push({id: docSnap.id, ...docSnap.data()});
-  });
-
-  dados.forEach((item)=>{
-    const jaVotou = votosUsuario.includes(item.id);
-
-    galeria.innerHTML += `
-      <div class="card">
-        <img src="${item.img}">
-        <p><b>${item.nome}</b></p>
-        <p>${item.setor}</p>
-        <p>${item.empresa}</p>
-        <p>⭐ ${item.votos}</p>
-        <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar('${item.id}')">
-          ${jaVotou ? 'Já votou' : 'Votar'}
-        </button>
-      </div>
-    `;
-  });
-
-  renderRanking(dados);
+function startHunt() {
+    playClick();
+    // Tenta iniciar a música no primeiro clique (política de navegadores)
+    bgMusic.volume = 0.4;
+    bgMusic.play().then(() => {
+        musicIcon.innerText = "🔊";
+    }).catch(e => console.log("Música aguardando interação"));
+    next(1);
 }
 
-function renderRanking(dados){
-  const ranking = document.getElementById('ranking');
-  ranking.innerHTML = '';
-
-  const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
-
-  top.forEach(item=>{
-    ranking.innerHTML += `
-      <div class="card">
-        <img src="${item.img}">
-        <p><b>${item.nome}</b></p>
-        <p>⭐ ${item.votos}</p>
-      </div>
-    `;
-  });
+function nextStep(n) {
+    playClick();
+    next(n);
 }
 
-window.enviar = enviar;
-window.votar = votar;
+function next(n){
+  document.getElementById("step"+n).classList.add("hidden");
+  document.getElementById("step"+(n+1)).classList.remove("hidden");
+}
 
-carregar();
+const totalIcons = 36;
+const premiado = Math.floor(Math.random() * totalIcons);
+const iconClasses = ['icon-egg', 'icon-bunny', 'icon-chocolate', 'icon-carrot'];
+
+const frasesErro = [
+    "Quase lá...", "Continue tentando...", "Tá perto!", "Não desista!", 
+    "O coelho passou por aqui...", "Procure melhor!", "Tente outro ícone!", 
+    "Ainda não foi dessa vez...", "Falta pouco!", "O prêmio está escondido...", 
+    "Siga sua intuição!", "Quase sentindo o cheiro do chocolate!", 
+    "Mais uma tentativa?", "Mire em outro lugar!", "A sorte está chegando...",
+    "Explore a grade!", "O ovo premiado está por perto!", "Tente a sorte de novo!"
+];
+
+let frasesDisponiveis = [...frasesErro];
+
+function getFeedbackAleatorio() {
+    if (frasesDisponiveis.length === 0) frasesDisponiveis = [...frasesErro];
+    const index = Math.floor(Math.random() * frasesDisponiveis.length);
+    return frasesDisponiveis.splice(index, 1)[0];
+}
+
+function generateGrid() {
+    const grid = document.getElementById('eggGrid');
+    for (let i = 0; i < totalIcons; i++) {
+        const div = document.createElement('div');
+        const randomIcon = iconClasses[Math.floor(Math.random() * iconClasses.length)];
+        div.className = `egg ${randomIcon}`;
+        div.onclick = () => checkEgg(i);
+        grid.appendChild(div);
+    }
+}
+
+generateGrid();
+
+function checkEgg(n){
+  let feedback = document.getElementById("feedback");
+
+  if(n === premiado){
+    winSound.play();
+    feedback.innerHTML = "🎉 Encontrou!";
+    const eggs = document.querySelectorAll('.egg');
+    eggs.forEach(egg => egg.style.pointerEvents = 'none');
+    
+    setTimeout(()=>{
+      next(3);
+      setTimeout(()=> next(4), 2000);
+    }, 800);
+  } else {
+    playClick();
+    feedback.innerHTML = getFeedbackAleatorio();
+  }
+}
+
+function resgatar(){
+  playClick();
+  window.location.href="http://umile.online/galeriapascoa";
+}
 </script>
+
+</body>
+</html>
