@@ -39,7 +39,7 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
   <input type="text" id="setor" placeholder="Seu setor">
   <input type="text" id="empresa" placeholder="Sua empresa">
   <input type="file" id="imagem" accept="image/*">
-  <button class="btn" id="btnEnviar">Enviar Foto</button>
+  <button class="btn" onclick="enviar()">Enviar Foto</button>
 
   <div class="grid" id="galeria"></div>
 
@@ -49,132 +49,104 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
   </div>
 </div>
 
-<!-- Firebase compat SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore-compat.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-<script>
-  // Configuração do Firebase
-  const firebaseConfig = {
-    apiKey: "AIzaSyCoSRQNZNIfSZq8db0XG-sZui1jxnNLBEU",
-    authDomain: "pascoagovernanca.firebaseapp.com",
-    projectId: "pascoagovernanca",
-    storageBucket: "pascoagovernanca.appspot.com",
-    messagingSenderId: "1014731249644",
-    appId: "1:1014731249644:web:347ec3f10573973956d2c9"
+// 🔹 Configuração do seu Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCoSRQNZNIfSZq8db0XG-sZui1jxnNLBEU",
+  authDomain: "pascoagovernanca.firebaseapp.com",
+  projectId: "pascoagovernanca",
+  storageBucket: "pascoagovernanca.firebasestorage.app",
+  messagingSenderId: "1014731249644",
+  appId: "1:1014731249644:web:347ec3f10573973956d2c9"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Função para enviar novo participante
+async function enviar(){
+  const nome = document.getElementById('nome').value;
+  const setor = document.getElementById('setor').value;
+  const empresa = document.getElementById('empresa').value;
+  const file = document.getElementById('imagem').files[0];
+
+  if(!nome || !setor || !empresa || !file){
+    alert('Preencha tudo');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+  reader.onload = async () => {
+    const fotoBase64 = reader.result;
+    await addDoc(collection(db, "participantes"), {
+      nome, setor, empresa, fotoBase64, votos:0
+    });
+    document.getElementById('nome').value='';
+    document.getElementById('setor').value='';
+    document.getElementById('empresa').value='';
+    document.getElementById('imagem').value='';
+    carregarGaleria();
+    mostrarRanking();
   };
+}
 
-  // Inicializar Firebase
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-
-  let votosUsuario = JSON.parse(localStorage.getItem('votosUsuario')) || [];
-
-  // Enviar foto com compressão
-  document.getElementById('btnEnviar').addEventListener('click', () => {
-    const nome = document.getElementById('nome').value;
-    const setor = document.getElementById('setor').value;
-    const empresa = document.getElementById('empresa').value;
-    const file = document.getElementById('imagem').files[0];
-
-    if(!nome || !setor || !empresa || !file){
-      alert('Preencha tudo');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = function(e){
-      const img = new Image();
-      img.onload = function(){
-        const canvas = document.createElement('canvas');
-        const maxWidth = 400;
-        const scaleSize = maxWidth / img.width;
-        canvas.width = maxWidth;
-        canvas.height = img.height * scaleSize;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        const imgBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
-        db.collection('galeriaPascoa').add({
-          nome, setor, empresa,
-          img: imgBase64,
-          votos: 0
-        }).then(()=>{
-          document.getElementById('nome').value = '';
-          document.getElementById('setor').value = '';
-          document.getElementById('empresa').value = '';
-          document.getElementById('imagem').value = '';
-          render();
-        }).catch(err=>{
-          alert('Erro ao enviar imagem: ' + err);
-        });
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
+// Função para carregar galeria
+async function carregarGaleria(){
+  const galeria = document.getElementById('galeria');
+  galeria.innerHTML = '';
+  const snapshot = await getDocs(collection(db, 'participantes'));
+  snapshot.forEach(docSnap=>{
+    const data = docSnap.data();
+    galeria.innerHTML += `
+      <div class="card">
+        <img src="${data.fotoBase64}">
+        <p><b>${data.nome}</b></p>
+        <p>${data.setor}</p>
+        <p>${data.empresa}</p>
+        <p>⭐ ${data.votos}</p>
+        <button class="vote-btn" onclick="votar('${docSnap.id}',${data.votos})">Votar</button>
+      </div>
+    `;
   });
+}
 
-  // Votar
-  function votar(docId){
-    if(votosUsuario.includes(docId)) return;
+// Função para votar
+window.votar = async (id, votosAtuais)=>{
+  const docRef = doc(db,'participantes',id);
+  await updateDoc(docRef,{votos:votosAtuais+1});
+  carregarGaleria();
+  mostrarRanking();
+};
 
-    const docRef = db.collection('galeriaPascoa').doc(docId);
-    docRef.get().then(docSnap=>{
-      if(docSnap.exists){
-        docRef.update({ votos: docSnap.data().votos + 1 }).then(()=>{
-          votosUsuario.push(docId);
-          localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
-          render();
-        });
-      }
-    });
-  }
+// Função para mostrar ranking Top 5
+async function mostrarRanking(){
+  const q = query(collection(db,'participantes'), orderBy('votos','desc'), limit(5));
+  const snapshot = await getDocs(q);
+  const ranking = document.getElementById('ranking');
+  ranking.innerHTML = '';
+  snapshot.forEach(docSnap=>{
+    const data = docSnap.data();
+    ranking.innerHTML += `
+      <div class="card">
+        <img src="${data.fotoBase64}">
+        <p><b>${data.nome}</b></p>
+        <p>⭐ ${data.votos}</p>
+      </div>
+    `;
+  });
+}
 
-  // Renderizar galeria
-  function render(){
-    const galeriaDiv = document.getElementById('galeria');
-    galeriaDiv.innerHTML = '';
+// Atualiza a galeria e ranking a cada 5 segundos
+setInterval(()=>{ carregarGaleria(); mostrarRanking(); },5000);
 
-    db.collection('galeriaPascoa').get().then(snapshot=>{
-      let dados = [];
-      snapshot.forEach(doc => dados.push({id: doc.id, ...doc.data()}));
+// Carrega ao abrir a página
+carregarGaleria();
+mostrarRanking();
 
-      dados.forEach(item=>{
-        const jaVotou = votosUsuario.includes(item.id);
-        galeriaDiv.innerHTML += `
-          <div class="card">
-            <img src="${item.img}">
-            <p><b>${item.nome}</b></p>
-            <p>${item.setor}</p>
-            <p>${item.empresa}</p>
-            <p>⭐ ${item.votos}</p>
-            <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar('${item.id}')">
-              ${jaVotou ? 'Já votou' : 'Votar'}
-            </button>
-          </div>
-        `;
-      });
-
-      renderRanking(dados);
-    });
-  }
-
-  function renderRanking(dados){
-    const ranking = document.getElementById('ranking');
-    ranking.innerHTML = '';
-    const top = [...dados].sort((a,b)=>b.votos - a.votos).slice(0,5);
-    top.forEach(item=>{
-      ranking.innerHTML += `
-        <div class="card">
-          <img src="${item.img}">
-          <p><b>${item.nome}</b></p>
-          <p>⭐ ${item.votos}</p>
-        </div>
-      `;
-    });
-  }
-
-  render();
 </script>
 
 </body>
