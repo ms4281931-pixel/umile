@@ -7,131 +7,27 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-
-body{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-}
-
-.bg-video{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:-2;
-  filter:brightness(0.5);
-}
-
-body::after{
-  content:"";
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  z-index:-1;
-}
-
-.container{
-  width:95%;
-  max-width:900px;
-  background:rgba(10,10,30,0.65);
-  backdrop-filter:blur(15px);
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(0,255,200,0.2);
-}
-
-h1{
-  text-align:center;
-  color:#00ffd0;
-  margin-bottom:15px;
-}
-
-/* INPUTS ESCUROS MODERNOS */
-input{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
-  background:rgba(0,0,0,0.6);
-  color:#fff;
-  outline:none;
-}
-
-input::placeholder{
-  color:#aaa;
-}
-
-input[type="file"]{
-  background:rgba(0,0,0,0.6);
-}
-
-.btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:30px;
-  background:linear-gradient(45deg,#00ffd0,#7a2bff);
-  color:#fff;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-top:20px;
-}
-
-.card{
-  background:rgba(255,255,255,0.05);
-  border-radius:15px;
-  padding:10px;
-  text-align:center;
-}
-
-.card img{
-  width:100%;
-  height:150px;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.vote-btn{
-  margin-top:8px;
-  background:#00ffd0;
-  color:#000;
-  border:none;
-  padding:6px 10px;
-  border-radius:20px;
-  cursor:pointer;
-}
-
-.vote-btn:disabled{
-  background:#555;
-  cursor:not-allowed;
-}
-
-.ranking{
-  margin-top:30px;
-}
-
-@media(max-width:500px){
-  .card img{height:120px;}
-}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#fff;}
+.bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(0.5);}
+body::after{content:"";position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
+.container{width:95%;max-width:900px;background:rgba(10,10,30,0.65);backdrop-filter:blur(15px);padding:25px;border-radius:20px;box-shadow:0 0 30px rgba(0,255,200,0.2);}
+h1{text-align:center;color:#00ffd0;margin-bottom:15px;}
+input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:#fff;outline:none;}
+input::placeholder{color:#aaa;}
+input[type="file"]{background:rgba(0,0,0,0.6);}
+.btn{width:100%;padding:12px;border:none;border-radius:30px;background:linear-gradient(45deg,#00ffd0,#7a2bff);color:#fff;cursor:pointer;margin-top:10px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;}
+.card{background:rgba(255,255,255,0.05);border-radius:15px;padding:10px;text-align:center;}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:10px;}
+.vote-btn{margin-top:8px;background:#00ffd0;color:#000;border:none;padding:6px 10px;border-radius:20px;cursor:pointer;}
+.vote-btn:disabled{background:#555;cursor:not-allowed;}
+.ranking{margin-top:30px;}
+@media(max-width:500px){.card img{height:120px;}}
 </style>
 </head>
 
 <body>
 
-<!-- MESMO VÍDEO DA LANDING -->
 <video autoplay muted loop playsinline class="bg-video">
   <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4?token=exp=1774742400~hmac=dd265f6cdfd621de05c13421667bed2930f2fb692a2bf5333147c0b5c82f1d7a" type="video/mp4">
 </video>
@@ -143,7 +39,7 @@ input[type="file"]{
   <input type="text" id="setor" placeholder="Seu setor">
   <input type="text" id="empresa" placeholder="Sua empresa">
   <input type="file" id="imagem" accept="image/*">
-  <button class="btn" onclick="enviar()">Enviar Foto</button>
+  <button class="btn" id="btnEnviar">Enviar Foto</button>
 
   <div class="grid" id="galeria"></div>
 
@@ -153,13 +49,12 @@ input[type="file"]{
   </div>
 </div>
 
-<!-- Firebase SDKs -->
-<script type="module">
-  // Import Firebase
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js";
-  import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.6.1/firebase-storage.js";
+<!-- Firebase SDKs (sem type="module" para GitHub Pages funcionar fácil) -->
+<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.1/firebase-storage.js"></script>
 
+<script>
   // Configuração do Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyCoSRQNZNIfSZq8db0XG-sZui1jxnNLBEU",
@@ -171,13 +66,14 @@ input[type="file"]{
   };
 
   // Inicializar Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-  const storage = getStorage(app);
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  const storage = firebase.storage();
 
   let votosUsuario = JSON.parse(localStorage.getItem('votosUsuario')) || [];
 
-  async function enviar(){
+  // Enviar foto
+  document.getElementById('btnEnviar').addEventListener('click', async () => {
     const nome = document.getElementById('nome').value;
     const setor = document.getElementById('setor').value;
     const empresa = document.getElementById('empresa').value;
@@ -188,13 +84,14 @@ input[type="file"]{
       return;
     }
 
-    // Upload da imagem para Storage
-    const storageRef = ref(storage, 'imagens/' + file.name);
-    await uploadBytes(storageRef, file);
-    const url = await getDownloadURL(storageRef);
+    // Nome único para evitar sobrescrever
+    const nomeArquivo = Date.now() + '_' + file.name;
+    const storageRef = storage.ref('imagens/' + nomeArquivo);
 
-    // Salvar dados no Firestore
-    await addDoc(collection(db, 'galeriaPascoa'), {
+    await storageRef.put(file);
+    const url = await storageRef.getDownloadURL();
+
+    await db.collection('galeriaPascoa').add({
       nome, setor, empresa,
       img: url,
       votos: 0
@@ -205,36 +102,33 @@ input[type="file"]{
     document.getElementById('setor').value = '';
     document.getElementById('empresa').value = '';
     document.getElementById('imagem').value = '';
-  }
+  });
 
-  async function votar(id){
-    if(votosUsuario.includes(id)) return;
+  // Votar
+  async function votar(docId){
+    if(votosUsuario.includes(docId)) return;
 
-    const docRef = doc(db, 'galeriaPascoa', id);
-    const docSnap = await getDocs(collection(db, 'galeriaPascoa'));
-    let allDocs = [];
-    docSnap.forEach(d => allDocs.push({id:d.id, ...d.data()}));
-
-    const item = allDocs.find(d=>d.id===id);
-    if(item){
-      await updateDoc(docRef, { votos: item.votos + 1 });
-      votosUsuario.push(id);
+    const docRef = db.collection('galeriaPascoa').doc(docId);
+    const docSnap = await docRef.get();
+    if(docSnap.exists){
+      await docRef.update({ votos: docSnap.data().votos + 1 });
+      votosUsuario.push(docId);
       localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
       render();
     }
   }
 
+  // Renderizar galeria
   async function render(){
     const galeriaDiv = document.getElementById('galeria');
     galeriaDiv.innerHTML = '';
 
-    const querySnapshot = await getDocs(collection(db, 'galeriaPascoa'));
+    const snapshot = await db.collection('galeriaPascoa').get();
     let dados = [];
-    querySnapshot.forEach(d => dados.push({id:d.id, ...d.data()}));
+    snapshot.forEach(doc => dados.push({id: doc.id, ...doc.data()}));
 
-    dados.forEach((item, i)=>{
+    dados.forEach(item=>{
       const jaVotou = votosUsuario.includes(item.id);
-
       galeriaDiv.innerHTML += `
         <div class="card">
           <img src="${item.img}">
@@ -255,9 +149,7 @@ input[type="file"]{
   function renderRanking(dados){
     const ranking = document.getElementById('ranking');
     ranking.innerHTML = '';
-
-    const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
-
+    const top = [...dados].sort((a,b)=>b.votos - a.votos).slice(0,5);
     top.forEach(item=>{
       ranking.innerHTML += `
         <div class="card">
@@ -269,6 +161,7 @@ input[type="file"]{
     });
   }
 
+  // Inicializa render
   render();
 </script>
 
