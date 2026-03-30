@@ -4,26 +4,130 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Galeria de Páscoa</title>
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-body{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#fff;}
-.bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(0.5);}
-body::after{content:"";position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
-.container{width:95%;max-width:900px;background:rgba(10,10,30,0.65);backdrop-filter:blur(15px);padding:25px;border-radius:20px;box-shadow:0 0 30px rgba(0,255,200,0.2);}
-h1{text-align:center;color:#00ffd0;margin-bottom:15px;}
-input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:#fff;outline:none;}
-input::placeholder{color:#aaa;}
-input[type="file"]{background:rgba(0,0,0,0.6);}
-.btn{width:100%;padding:12px;border:none;border-radius:30px;background:linear-gradient(45deg,#00ffd0,#7a2bff);color:#fff;cursor:pointer;margin-top:10px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;}
-.card{background:rgba(255,255,255,0.05);border-radius:15px;padding:10px;text-align:center;}
-.card img{width:100%;height:150px;object-fit:cover;border-radius:10px;}
-.vote-btn{margin-top:8px;background:#00ffd0;color:#000;border:none;padding:6px 10px;border-radius:20px;cursor:pointer;}
-.vote-btn:disabled{background:#555;cursor:not-allowed;}
-.ranking{margin-top:30px;}
-@media(max-width:500px){.card img{height:120px;}}
+
+body{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+}
+
+.bg-video{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:-2;
+  filter:brightness(0.5);
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.6);
+  z-index:-1;
+}
+
+.container{
+  width:95%;
+  max-width:900px;
+  background:rgba(10,10,30,0.65);
+  backdrop-filter:blur(15px);
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(0,255,200,0.2);
+}
+
+h1{
+  text-align:center;
+  color:#00ffd0;
+  margin-bottom:15px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin:6px 0;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,0.1);
+  background:rgba(0,0,0,0.6);
+  color:#fff;
+  outline:none;
+}
+
+input::placeholder{
+  color:#aaa;
+}
+
+input[type="file"]{
+  background:rgba(0,0,0,0.6);
+}
+
+.btn{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:30px;
+  background:linear-gradient(45deg,#00ffd0,#7a2bff);
+  color:#fff;
+  cursor:pointer;
+  margin-top:10px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin-top:20px;
+}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  border-radius:15px;
+  padding:10px;
+  text-align:center;
+}
+
+.card img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+.vote-btn{
+  margin-top:8px;
+  background:#00ffd0;
+  color:#000;
+  border:none;
+  padding:6px 10px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.vote-btn:disabled{
+  background:#555;
+  cursor:not-allowed;
+}
+
+.ranking{
+  margin-top:30px;
+}
+
+@media(max-width:500px){
+  .card img{height:120px;}
+}
 </style>
 </head>
+
 <body>
 
 <video autoplay muted loop playsinline class="bg-video">
@@ -32,6 +136,7 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
 
 <div class="container">
   <h1>🐰 Galeria de Páscoa</h1>
+
   <input type="text" id="nome" placeholder="Seu nome">
   <input type="text" id="setor" placeholder="Seu setor">
   <input type="text" id="empresa" placeholder="Sua empresa">
@@ -46,29 +151,24 @@ input[type="file"]{background:rgba(0,0,0,0.6);}
   </div>
 </div>
 
-<!-- Supabase JS -->
+<!-- SUPABASE -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
-// Conexão com Supabase
+// Inicialização Supabase
 const supabaseUrl = 'https://gfakakiwalrinnzsneps.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY';
+const supabaseKey = 'SUA_ANON_KEY_AQUI'; // substitua pela sua chave anon
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// Arrays para votos locais
-let votosUsuario = JSON.parse(localStorage.getItem('votosUsuario')) || [];
+let dados = [];
+let votosUsuario = [];
+if(localStorage.getItem('galeriaPascoa')) dados = JSON.parse(localStorage.getItem('galeriaPascoa'));
+if(localStorage.getItem('votosUsuario')) votosUsuario = JSON.parse(localStorage.getItem('votosUsuario'));
 
-// Carregar galeria do Supabase
-async function carregarGaleria(){
-  try{
-    const { data, error } = await supabase.from('galeria-gov').select('*');
-    if(error) throw error;
-    render(data);
-  } catch(err){
-    console.error('Erro ao carregar galeria:', err);
-  }
+function salvar(){
+  localStorage.setItem('galeriaPascoa', JSON.stringify(dados));
+  localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
 }
 
-// Enviar imagem
 async function enviar(){
   const nome = document.getElementById('nome').value;
   const setor = document.getElementById('setor').value;
@@ -80,52 +180,46 @@ async function enviar(){
     return;
   }
 
-  const nomeArquivo = `${Date.now()}-${file.name.replace(/\s/g,'_')}`;
+  const fileName = `${Date.now()}-${file.name}`;
 
-  try{
-    // Upload para o bucket
-    const { data: uploadData, error: uploadError } = await supabase
-      .storage
-      .from('fotos-pascoa-gov')
-      .upload(nomeArquivo, file);
+  const { data, error } = await supabase.storage
+    .from('fotos-pascoa-gov')
+    .upload(fileName, file);
 
-    if(uploadError) throw uploadError;
-
-    // Pegar URL pública
-    const { data: publicUrlData } = supabase
-      .storage
-      .from('fotos-pascoa-gov')
-      .getPublicUrl(nomeArquivo);
-
-    const imgUrl = publicUrlData.publicUrl;
-
-    // Inserir registro no banco
-    const { error: insertError } = await supabase
-      .from('galeria-gov')
-      .insert([{ nome, setor, empresa, img: imgUrl, votos:0 }]);
-
-    if(insertError) throw insertError;
-
-    // Limpar inputs
-    document.getElementById('nome').value = '';
-    document.getElementById('setor').value = '';
-    document.getElementById('empresa').value = '';
-    document.getElementById('imagem').value = '';
-
-    carregarGaleria();
-
-  } catch(err){
-    console.error('Erro no upload:', err);
+  if(error){
+    console.error('Erro no upload:', error);
     alert('Erro ao enviar foto');
+    return;
   }
+
+  const { publicUrl, error: urlError } = supabase.storage
+    .from('fotos-pascoa-gov')
+    .getPublicUrl(fileName);
+
+  if(urlError){
+    console.error('Erro ao pegar URL pública:', urlError);
+    alert('Erro ao gerar link da foto');
+    return;
+  }
+
+  dados.push({ nome, setor, empresa, img: publicUrl, votos: 0 });
+  salvar();
+  render();
 }
 
-// Funções de renderização
-function render(dados){
+function votar(index){
+  if(votosUsuario.includes(index)) return;
+  dados[index].votos++;
+  votosUsuario.push(index);
+  salvar();
+  render();
+}
+
+function render(){
   const galeria = document.getElementById('galeria');
   galeria.innerHTML = '';
-  dados.forEach((item, i)=>{
-    const jaVotou = votosUsuario.includes(item.id);
+  dados.forEach((item,i)=>{
+    const jaVotou = votosUsuario.includes(i);
     galeria.innerHTML += `
       <div class="card">
         <img src="${item.img}">
@@ -133,34 +227,16 @@ function render(dados){
         <p>${item.setor}</p>
         <p>${item.empresa}</p>
         <p>⭐ ${item.votos}</p>
-        <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar(${item.id})">
+        <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar(${i})">
           ${jaVotou ? 'Já votou' : 'Votar'}
         </button>
       </div>
     `;
   });
-  renderRanking(dados);
+  renderRanking();
 }
 
-// Função de votos
-async function votar(id){
-  if(votosUsuario.includes(id)) return;
-  try{
-    const { data, error } = await supabase
-      .from('galeria-gov')
-      .update({ votos: supabase.raw('votos + 1') })
-      .eq('id', id);
-    if(error) throw error;
-    votosUsuario.push(id);
-    localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
-    carregarGaleria();
-  } catch(err){
-    console.error('Erro ao votar:', err);
-  }
-}
-
-// Ranking Top 5
-function renderRanking(dados){
+function renderRanking(){
   const ranking = document.getElementById('ranking');
   ranking.innerHTML = '';
   const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
@@ -175,8 +251,8 @@ function renderRanking(dados){
   });
 }
 
-// Inicializa galeria
-carregarGaleria();
+render();
 </script>
+
 </body>
 </html>
