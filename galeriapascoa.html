@@ -36,7 +36,7 @@ input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid r
   <input type="text" id="nome" placeholder="Seu nome">
   <input type="text" id="setor" placeholder="Seu setor">
   <input type="text" id="empresa" placeholder="Sua empresa">
-  <input type="file" id="imagem">
+  <input type="file" id="imagem" accept="image/*">
 
   <button class="btn" onclick="enviar()">Enviar Foto</button>
 
@@ -48,10 +48,8 @@ input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid r
 
 <script>
 // ==========================================
-// SUPABASE CONFIG
-// ==========================================
-const SUPABASE_URL = 'https://gfakakiwalrinznneps.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY';
+const SUPABASE_URL = 'https://gfakakiwalrinnzsneps.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY'; // ⚠️ CONFERE SE ESTÁ COMPLETA
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -60,44 +58,48 @@ let votosUsuario = JSON.parse(localStorage.getItem('votosUsuarioPascoa')) || [];
 
 // ==========================================
 async function carregarDados() {
-  const { data, error } = await supabase
-    .from('galeria')
-    .select('*')
-    .order('created_at', { ascending: false });
+  try {
+    const { data, error } = await supabase
+      .from('galeria')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error(error);
-    alert('Erro ao carregar');
-    return;
+    if (error) throw error;
+
+    dados = data || [];
+    render();
+
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao carregar dados');
   }
-
-  dados = data;
-  render();
 }
 
 // ==========================================
 async function enviar() {
-  const nome = document.getElementById('nome').value;
-  const setor = document.getElementById('setor').value;
-  const empresa = document.getElementById('empresa').value;
+  const nome = document.getElementById('nome').value.trim();
+  const setor = document.getElementById('setor').value.trim();
+  const empresa = document.getElementById('empresa').value.trim();
   const file = document.getElementById('imagem').files[0];
 
   if (!nome || !setor || !empresa || !file) {
-    alert('Preencha tudo');
+    alert('Preencha todos os campos');
     return;
   }
 
   try {
-    const fileName = Date.now() + '-' + file.name;
+    // limpa nome do arquivo
+    const safeName = file.name.replace(/\s+/g, '-').toLowerCase();
+    const fileName = Date.now() + '-' + safeName;
 
     const { error: uploadError } = await supabase.storage
-      .from('fotos-pascoa-gov') // ✅ CORRIGIDO
+      .from('fotos-pascoa-gov')
       .upload(fileName, file, { upsert: false });
 
     if (uploadError) throw uploadError;
 
-    const { data } = supabase.storage
-      .from('fotos-pascoa-gov') // ✅ CORRIGIDO
+    const { data: urlData } = supabase.storage
+      .from('fotos-pascoa-gov')
       .getPublicUrl(fileName);
 
     const { error: dbError } = await supabase
@@ -106,18 +108,20 @@ async function enviar() {
         nome,
         setor,
         empresa,
-        img_url: data.publicUrl,
+        img_url: urlData.publicUrl,
         votos: 0
       }]);
 
     if (dbError) throw dbError;
 
-    alert('Foto enviada!');
+    alert('Foto enviada com sucesso!');
+    document.getElementById('imagem').value = '';
+
     carregarDados();
 
   } catch (err) {
     console.error(err);
-    alert('Erro ao enviar');
+    alert('Erro ao enviar foto');
   }
 }
 
@@ -128,27 +132,34 @@ async function votar(id, votos) {
     return;
   }
 
-  const { error } = await supabase
-    .from('galeria')
-    .update({ votos: votos + 1 })
-    .eq('id', id);
+  try {
+    const { error } = await supabase
+      .from('galeria')
+      .update({ votos: votos + 1 })
+      .eq('id', id);
 
-  if (error) {
-    console.error(error);
+    if (error) throw error;
+
+    votosUsuario.push(id);
+    localStorage.setItem('votosUsuarioPascoa', JSON.stringify(votosUsuario));
+
+    carregarDados();
+
+  } catch (err) {
+    console.error(err);
     alert('Erro ao votar');
-    return;
   }
-
-  votosUsuario.push(id);
-  localStorage.setItem('votosUsuarioPascoa', JSON.stringify(votosUsuario));
-
-  carregarDados();
 }
 
 // ==========================================
 function render() {
   const galeria = document.getElementById('galeria');
   galeria.innerHTML = '';
+
+  if (dados.length === 0) {
+    galeria.innerHTML = '<p>Nenhuma foto ainda</p>';
+    return;
+  }
 
   dados.forEach(item => {
     const jaVotou = votosUsuario.includes(item.id);
@@ -171,11 +182,14 @@ function render() {
   renderRanking();
 }
 
+// ==========================================
 function renderRanking() {
   const ranking = document.getElementById('ranking');
   ranking.innerHTML = '';
 
-  const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
+  const top = [...dados]
+    .sort((a,b)=>b.votos-a.votos)
+    .slice(0,5);
 
   top.forEach((item, i) => {
     ranking.innerHTML += `
@@ -188,7 +202,7 @@ function renderRanking() {
   });
 }
 
-// INIT
+// ==========================================
 carregarDados();
 </script>
 
