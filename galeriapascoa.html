@@ -81,7 +81,7 @@ async function enviar(){
     const { error: uploadError } = await supabaseClient
       .storage
       .from('fotos-pascoa-gov')
-      .upload(fileName, file);
+      .upload('public/' + fileName, file);
 
     if(uploadError){
       console.error(uploadError);
