@@ -3,256 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Galeria de Páscoa</title>
+<title>Concurso de Páscoa</title>
+
+<link rel="icon" type="image/png" href="https://i.ibb.co/sJk3rC10/freepik-preciso-dessa-imagem-em-png-sem-fundo-0001.png">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-
-body{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-}
-
-.bg-video{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:-2;
-  filter:brightness(0.5);
-}
-
-body::after{
-  content:"";
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  z-index:-1;
-}
-
-.container{
-  width:95%;
-  max-width:900px;
-  background:rgba(10,10,30,0.65);
-  backdrop-filter:blur(15px);
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(0,255,200,0.2);
-}
-
-h1{
-  text-align:center;
-  color:#00ffd0;
-  margin-bottom:15px;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
-  background:rgba(0,0,0,0.6);
-  color:#fff;
-  outline:none;
-}
-
-input::placeholder{
-  color:#aaa;
-}
-
-input[type="file"]{
-  background:rgba(0,0,0,0.6);
-}
-
-.btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:30px;
-  background:linear-gradient(45deg,#00ffd0,#7a2bff);
-  color:#fff;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-top:20px;
-}
-
-.card{
-  background:rgba(255,255,255,0.05);
-  border-radius:15px;
-  padding:10px;
-  text-align:center;
-}
-
-.card img{
-  width:100%;
-  height:150px;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.vote-btn{
-  margin-top:8px;
-  background:#00ffd0;
-  color:#000;
-  border:none;
-  padding:6px 10px;
-  border-radius:20px;
-  cursor:pointer;
-}
-
-.vote-btn:disabled{
-  background:#555;
-  cursor:not-allowed;
-}
-
-.ranking{
-  margin-top:30px;
-}
-
-@media(max-width:500px){
-  .card img{height:120px;}
-}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow-x:hidden;position:relative;color:#fff;background:#0a0a1e;padding-top:30px;}
+.bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-3;filter:brightness(0.5);pointer-events:none;}
+body::after{content:"";position:absolute;width:100%;height:100%;z-index:-2;background:rgba(0,0,0,0.5);}
+.container{position:relative;z-index:1;width:95%;max-width:600px;padding:30px;border-radius:25px;background:rgba(10,10,30,0.65);backdrop-filter:blur(15px);box-shadow:0 0 30px rgba(0,255,200,0.2);text-align:center;transition:0.3s;margin-bottom:30px;}
+h1{color:#00ffd0;display:flex;align-items:center;justify-content:center;gap:10px;}
+.title-icon{width:40px;height:40px;background:url('https://i.ibb.co/sJk3rC10/freepik-preciso-dessa-imagem-em-png-sem-fundo-0001.png') center/contain no-repeat;display:inline-block;}
+p{color:#ccc;margin-bottom:20px;}
+.btn{background:linear-gradient(45deg,#00ffd0,#7a2bff);border:none;padding:14px;border-radius:40px;cursor:pointer;margin:6px 0;color:#fff;font-weight:bold;transition:0.3s;}
+.btn:hover{transform:scale(1.1);box-shadow:0 0 20px #00ffd0;}
+.hidden{display:none;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:15px;margin-top:20px;}
+.photo-card{position:relative;border-radius:15px;overflow:hidden;cursor:pointer;transition:0.3s;box-shadow:0 5px 15px rgba(0,0,0,0.4);}
+.photo-card img{width:100%;height:150px;object-fit:cover;display:block;}
+.photo-info{position:absolute;bottom:0;width:100%;background:rgba(0,0,0,0.6);color:#00ffd0;padding:5px;font-size:0.85rem;text-align:center;}
+.vote-btn{position:absolute;top:10px;right:10px;background:linear-gradient(45deg,#7a2bff,#00ffd0);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-weight:bold;color:#fff;display:flex;align-items:center;justify-content:center;transition:0.3s;}
+.vote-btn:hover{transform:scale(1.2);box-shadow:0 0 10px #00ffd0;}
+.loader{width:40px;height:40px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid #00ffd0;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;}
+@keyframes spin{100%{transform:rotate(360deg);}}
+.audio-control{position:fixed;bottom:20px;right:20px;z-index:100;background:rgba(10,10,30,0.8);padding:10px;border-radius:50%;cursor:pointer;border:1px solid #00ffd0;display:flex;align-items:center;justify-content:center;}
+form{display:flex;flex-direction:column;gap:12px;margin-top:10px;}
+input, select{padding:12px;border-radius:12px;border:none;outline:none;font-size:1rem;}
+input[type="file"]{padding:6px;background:rgba(255,255,255,0.1);color:#fff;}
 </style>
 </head>
-
 <body>
 
+<!-- Vídeo de fundo -->
 <video autoplay muted loop playsinline class="bg-video">
   <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4?token=exp=1774742400~hmac=dd265f6cdfd621de05c13421667bed2930f2fb692a2bf5333147c0b5c82f1d7a" type="video/mp4">
 </video>
 
-<div class="container">
-  <h1>🐰 Galeria de Páscoa</h1>
+<!-- Áudio -->
+<audio id="bgMusic" loop>
+  <source src="https://soundimage.org/wp-content/uploads/2014/10/Light-Years_v001.mp3" type="audio/mpeg">
+</audio>
 
-  <input type="text" id="nome" placeholder="Seu nome">
-  <input type="text" id="setor" placeholder="Seu setor">
-  <input type="text" id="empresa" placeholder="Sua empresa">
-  <input type="file" id="imagem" accept="image/*">
-  <button class="btn" onclick="enviar()">Enviar Foto</button>
+<div class="audio-control" onclick="toggleMusic()" title="Ligar/Desligar Música">
+  <span id="musicIcon">🔇</span>
+</div>
 
-  <div class="grid" id="galeria"></div>
+<!-- Etapa 1: Cadastro -->
+<div class="container" id="step1">
+  <h1><span class="title-icon"></span> Concurso de Páscoa</h1>
+  <p>Cadastre-se e envie sua foto!</p>
+  <form id="cadastroForm">
+    <input type="text" placeholder="Nome completo" id="nome" required>
+    <input type="text" placeholder="Setor" id="setor" required>
+    <input type="text" placeholder="Empresa" id="empresa" required>
+    <input type="file" id="foto" accept="image/*" required>
+    <button type="submit" class="btn">Enviar Foto</button>
+  </form>
+</div>
 
-  <div class="ranking">
-    <h1>🏆 Top 5</h1>
-    <div class="grid" id="ranking"></div>
+<!-- Etapa 2: Galeria -->
+<div class="container hidden" id="step2">
+  <h1>📸 Galeria de Páscoa</h1>
+  <div class="grid" id="galleryGrid">
+    <!-- Fotos carregadas dinamicamente -->
   </div>
 </div>
 
-<!-- SUPABASE -->
+<!-- Import Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
-// Inicialização Supabase
-const supabaseUrl = 'https://gfakakiwalrinnzsneps.supabase.co';
-const supabaseKey = 'SUA_ANON_KEY_AQUI'; // substitua pela sua chave anon
+// Conexão Supabase
+const supabaseUrl = "https://gfakakiwalrinnzsneps.supabase.co";
+const supabaseKey = "sb_publishable_qT7Xdk8KILijA6ctTQQjmw_c4KMfhg2";
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-let dados = [];
-let votosUsuario = [];
-if(localStorage.getItem('galeriaPascoa')) dados = JSON.parse(localStorage.getItem('galeriaPascoa'));
-if(localStorage.getItem('votosUsuario')) votosUsuario = JSON.parse(localStorage.getItem('votosUsuario'));
-
-function salvar(){
-  localStorage.setItem('galeriaPascoa', JSON.stringify(dados));
-  localStorage.setItem('votosUsuario', JSON.stringify(votosUsuario));
+// Áudio
+const bgMusic = document.getElementById('bgMusic');
+const musicIcon = document.getElementById('musicIcon');
+function toggleMusic() {
+    if(bgMusic.paused){ bgMusic.play(); musicIcon.innerText="🔊"; } 
+    else{ bgMusic.pause(); musicIcon.innerText="🔇"; }
 }
 
-async function enviar(){
-  const nome = document.getElementById('nome').value;
-  const setor = document.getElementById('setor').value;
-  const empresa = document.getElementById('empresa').value;
-  const file = document.getElementById('imagem').files[0];
+// Cadastro + Upload
+const cadastroForm = document.getElementById('cadastroForm');
+cadastroForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    const nome = document.getElementById('nome').value;
+    const setor = document.getElementById('setor').value;
+    const empresa = document.getElementById('empresa').value;
+    const foto = document.getElementById('foto').files[0];
+    if(!foto) return alert("Selecione uma foto");
 
-  if(!nome || !setor || !empresa || !file){
-    alert('Preencha tudo');
-    return;
-  }
+    // Criar usuário
+    const { data:user, error:userErr } = await supabase.from("users").insert([{ nome, setor, empresa }]).select().single();
+    if(userErr){ console.error(userErr); return alert("Erro ao cadastrar usuário"); }
 
-  const fileName = `${Date.now()}-${file.name}`;
+    // Upload da foto
+    const fileExt = foto.name.split('.').pop();
+    const fileName = `${user.id}_${Date.now()}.${fileExt}`;
+    const { data: uploadData, error: uploadErr } = await supabase.storage.from("photos").upload(fileName, foto);
+    if(uploadErr){ console.error(uploadErr); return alert("Erro ao enviar foto"); }
 
-  const { data, error } = await supabase.storage
-    .from('fotos-pascoa-gov')
-    .upload(fileName, file);
+    // URL pública
+    const { publicUrl } = supabase.storage.from("photos").getPublicUrl(fileName);
 
-  if(error){
-    console.error('Erro no upload:', error);
-    alert('Erro ao enviar foto');
-    return;
-  }
+    // Inserir foto na tabela
+    const { data: photoData, error: photoErr } = await supabase.from("photos").insert([{ user_id: user.id, url: publicUrl }]);
+    if(photoErr){ console.error(photoErr); return alert("Erro ao salvar foto"); }
 
-  const { publicUrl, error: urlError } = supabase.storage
-    .from('fotos-pascoa-gov')
-    .getPublicUrl(fileName);
+    alert("Foto enviada com sucesso!");
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+    loadGallery();
+});
 
-  if(urlError){
-    console.error('Erro ao pegar URL pública:', urlError);
-    alert('Erro ao gerar link da foto');
-    return;
-  }
+// Carregar galeria
+async function loadGallery(){
+    const gallery = document.getElementById('galleryGrid');
+    gallery.innerHTML="";
+    const { data: photos, error } = await supabase.from("photos").select("id, url, user_id, votes(user_id)").order("id",{ascending:false});
+    if(error){ console.error(error); return; }
 
-  dados.push({ nome, setor, empresa, img: publicUrl, votos: 0 });
-  salvar();
-  render();
+    for(const photo of photos){
+        // Pegar dados do usuário
+        const { data: userData } = await supabase.from("users").select("nome,setor,empresa").eq("id",photo.user_id).single();
+        const card = document.createElement("div");
+        card.className="photo-card";
+        card.innerHTML=`
+          <img src="${photo.url}" alt="Foto">
+          <div class="photo-info">${userData.nome} - ${userData.setor}</div>
+          <button class="vote-btn" onclick="votePhoto(${photo.id})">❤</button>
+        `;
+        gallery.appendChild(card);
+    }
 }
 
-function votar(index){
-  if(votosUsuario.includes(index)) return;
-  dados[index].votos++;
-  votosUsuario.push(index);
-  salvar();
-  render();
+// Votar em foto
+async function votePhoto(photoId){
+    const userId = prompt("Digite seu nome ou ID para votar (para testes)");
+    if(!userId) return;
+
+    // Checar se já votou
+    const { data: existing, error } = await supabase.from("votes").select("*").eq("user_id",userId).eq("photo_id",photoId).single();
+    if(existing) return alert("Você já votou nesta foto!");
+
+    const { data, error: voteErr } = await supabase.from("votes").insert([{ user_id: userId, photo_id: photoId }]);
+    if(voteErr){ console.error(voteErr); return alert("Erro ao registrar voto"); }
+
+    alert("Voto registrado!");
+    loadGallery();
 }
 
-function render(){
-  const galeria = document.getElementById('galeria');
-  galeria.innerHTML = '';
-  dados.forEach((item,i)=>{
-    const jaVotou = votosUsuario.includes(i);
-    galeria.innerHTML += `
-      <div class="card">
-        <img src="${item.img}">
-        <p><b>${item.nome}</b></p>
-        <p>${item.setor}</p>
-        <p>${item.empresa}</p>
-        <p>⭐ ${item.votos}</p>
-        <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar(${i})">
-          ${jaVotou ? 'Já votou' : 'Votar'}
-        </button>
-      </div>
-    `;
-  });
-  renderRanking();
-}
-
-function renderRanking(){
-  const ranking = document.getElementById('ranking');
-  ranking.innerHTML = '';
-  const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
-  top.forEach(item=>{
-    ranking.innerHTML += `
-      <div class="card">
-        <img src="${item.img}">
-        <p><b>${item.nome}</b></p>
-        <p>⭐ ${item.votos}</p>
-      </div>
-    `;
-  });
-}
-
-render();
+// Inicializar galeria
+loadGallery();
 </script>
-
 </body>
 </html>
