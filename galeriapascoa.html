@@ -9,131 +9,29 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
-
-body{
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  color:#fff;
-}
-
-.bg-video{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  z-index:-2;
-  filter:brightness(0.5);
-}
-
-body::after{
-  content:"";
-  position:fixed;
-  width:100%;
-  height:100%;
-  background:rgba(0,0,0,0.6);
-  z-index:-1;
-}
-
-.container{
-  width:95%;
-  max-width:900px;
-  background:rgba(10,10,30,0.65);
-  backdrop-filter:blur(15px);
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(0,255,200,0.2);
-}
-
-h1{
-  text-align:center;
-  color:#00ffd0;
-  margin-bottom:15px;
-}
-
-input{
-  width:100%;
-  padding:12px;
-  margin:6px 0;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.1);
-  background:rgba(0,0,0,0.6);
-  color:#fff;
-  outline:none;
-}
-
-input::placeholder{
-  color:#aaa;
-}
-
-input[type="file"]{
-  background:rgba(0,0,0,0.6);
-}
-
-.btn{
-  width:100%;
-  padding:12px;
-  border:none;
-  border-radius:30px;
-  background:linear-gradient(45deg,#00ffd0,#7a2bff);
-  color:#fff;
-  cursor:pointer;
-  margin-top:10px;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-top:20px;
-}
-
-.card{
-  background:rgba(255,255,255,0.05);
-  border-radius:15px;
-  padding:10px;
-  text-align:center;
-}
-
-.card img{
-  width:100%;
-  height:150px;
-  object-fit:cover;
-  border-radius:10px;
-}
-
-.vote-btn{
-  margin-top:8px;
-  background:#00ffd0;
-  color:#000;
-  border:none;
-  padding:6px 10px;
-  border-radius:20px;
-  cursor:pointer;
-}
-
-.vote-btn:disabled{
-  background:#555;
-  cursor:not-allowed;
-}
-
-.ranking{
-  margin-top:30px;
-}
-
-@media(max-width:500px){
-  .card img{height:120px;}
-}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#fff;}
+.bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(0.5);}
+body::after{content:"";position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
+.container{width:95%;max-width:900px;background:rgba(10,10,30,0.65);backdrop-filter:blur(15px);padding:25px;border-radius:20px;box-shadow:0 0 30px rgba(0,255,200,0.2);}
+h1{text-align:center;color:#00ffd0;margin-bottom:15px;}
+input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:#fff;outline:none;}
+input::placeholder{color:#aaa;}
+input[type="file"]{background:rgba(0,0,0,0.6);}
+.btn{width:100%;padding:12px;border:none;border-radius:30px;background:linear-gradient(45deg,#00ffd0,#7a2bff);color:#fff;cursor:pointer;margin-top:10px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;}
+.card{background:rgba(255,255,255,0.05);border-radius:15px;padding:10px;text-align:center;}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:10px;}
+.vote-btn{margin-top:8px;background:#00ffd0;color:#000;border:none;padding:6px 10px;border-radius:20px;cursor:pointer;}
+.vote-btn:disabled{background:#555;cursor:not-allowed;}
+.ranking{margin-top:30px;}
+@media(max-width:500px){.card img{height:120px;}}
 </style>
 </head>
 
 <body>
 
 <video autoplay muted loop playsinline class="bg-video">
-  <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4?token=exp=1774742400~hmac=dd265f6cdfd621de05c13421667bed2930f2fb692a2bf5333147c0b5c82f1d7a" type="video/mp4">
+  <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4" type="video/mp4">
 </video>
 
 <div class="container">
@@ -153,31 +51,24 @@ input[type="file"]{
   </div>
 </div>
 
-<script defer>
-// 🔥 CONFIG SUPABASE
+<script>
+// CONFIG
 const SUPABASE_URL = "https://gfakakiwalrinnzsneps.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...";
 
-if (!window.supabase) {
-  alert("Erro ao carregar Supabase");
-}
-
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// 🔥 APENAS UMA VEZ
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let dados = [];
 let votosUsuario = [];
 
 async function enviar(){
-  console.log("clicou no botão");
+  console.log("clicou");
 
   const nome = document.getElementById('nome').value;
   const setor = document.getElementById('setor').value;
   const empresa = document.getElementById('empresa').value;
   const file = document.getElementById('imagem').files[0];
-
-  console.log("arquivo:", file);
-
-  alert("chegou até aqui");
 
   if(!nome || !setor || !empresa || !file){
     alert('Preencha tudo');
@@ -187,70 +78,62 @@ async function enviar(){
   try {
     const fileName = Date.now() + "-" + file.name;
 
-    const { error: uploadError } = await supabase
+    const { error: uploadError } = await supabaseClient
       .storage
       .from('fotos-pascoa-gov')
       .upload(fileName, file);
 
     if(uploadError){
       console.error(uploadError);
-      alert("Erro ao enviar imagem");
+      alert("Erro no upload");
       return;
     }
 
-    const { data } = supabase
+    const { data } = supabaseClient
       .storage
       .from('fotos-pascoa-gov')
       .getPublicUrl(fileName);
 
-    const imageUrl = data.publicUrl;
-
-    const { error: insertError } = await supabase
+    const { error: insertError } = await supabaseClient
       .from('galeria-gov')
       .insert([{
         nome,
         setor,
         empresa,
-        img: imageUrl,
+        img: data.publicUrl,
         votos: 0
       }]);
 
     if(insertError){
       console.error(insertError);
-      alert("Erro ao salvar dados");
+      alert("Erro ao salvar");
       return;
     }
 
-    alert("Enviado com sucesso!");
+    alert("Enviado!");
     carregarGaleria();
 
   } catch(err){
     console.error(err);
-    alert("Erro inesperado");
+    alert("Erro geral");
   }
 }
 
 document.getElementById("btnEnviar").addEventListener("click", enviar);
 
 async function carregarGaleria(){
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from('galeria-gov')
     .select('*');
 
-  if(error){
-    console.error(error);
-    return;
+  if(!error){
+    dados = data;
+    render();
   }
-
-  dados = data;
-  render();
 }
 
 function votar(index){
-  if(votosUsuario.includes(index)) return;
-
   dados[index].votos++;
-  votosUsuario.push(index);
   render();
 }
 
@@ -259,8 +142,6 @@ function render(){
   galeria.innerHTML = '';
 
   dados.forEach((item, i)=>{
-    const jaVotou = votosUsuario.includes(i);
-
     galeria.innerHTML += `
       <div class="card">
         <img src="${item.img}">
@@ -268,28 +149,7 @@ function render(){
         <p>${item.setor}</p>
         <p>${item.empresa}</p>
         <p>⭐ ${item.votos}</p>
-        <button class="vote-btn" ${jaVotou ? 'disabled' : ''} onclick="votar(${i})">
-          ${jaVotou ? 'Já votou' : 'Votar'}
-        </button>
-      </div>
-    `;
-  });
-
-  renderRanking();
-}
-
-function renderRanking(){
-  const ranking = document.getElementById('ranking');
-  ranking.innerHTML = '';
-
-  const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
-
-  top.forEach(item=>{
-    ranking.innerHTML += `
-      <div class="card">
-        <img src="${item.img}">
-        <p><b>${item.nome}</b></p>
-        <p>⭐ ${item.votos}</p>
+        <button class="vote-btn" onclick="votar(${i})">Votar</button>
       </div>
     `;
   });
