@@ -92,7 +92,7 @@ async function enviar(){
     const { data } = supabaseClient
       .storage
       .from('fotos-pascoa-gov')
-      .getPublicUrl(fileName);
+      .getPublicUrl('public/' + fileName);
 
     const { error: insertError } = await supabaseClient
       .from('galeria-gov')
