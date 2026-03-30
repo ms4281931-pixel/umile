@@ -155,7 +155,7 @@ input[type="file"]{
 
 <script>
 // 🔥 CONFIG SUPABASE
-const SUPABASE_URL = "SUA_URL_AQUI";
+const SUPABASE_URL = "https://gfakakiwalrinnzsneps.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY";
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -196,7 +196,7 @@ async function enviar(){
     const imageUrl = data.publicUrl;
 
     const { error: insertError } = await supabase
-      .from('fotos')
+      .from('galeria-gov')
       .insert([{
         nome,
         setor,
@@ -222,7 +222,7 @@ async function enviar(){
 
 async function carregarGaleria(){
   const { data, error } = await supabase
-    .from('fotos')
+    .from('galeria-gov')
     .select('*');
 
   if(error){
