@@ -164,10 +164,16 @@ let dados = [];
 let votosUsuario = [];
 
 async function enviar(){
+  console.log("clicou no botão");
+
   const nome = document.getElementById('nome').value;
   const setor = document.getElementById('setor').value;
   const empresa = document.getElementById('empresa').value;
   const file = document.getElementById('imagem').files[0];
+
+  console.log("arquivo:", file);
+
+  alert("chegou até aqui");
 
   if(!nome || !setor || !empresa || !file){
     alert('Preencha tudo');
