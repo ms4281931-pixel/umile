@@ -1,72 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galeria de Páscoa</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+/* (SEU CSS ORIGINAL MANTIDO) */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{min-height:100vh;display:flex;align-items:center;justify-content:center;color:#fff;padding:20px 0;}
+.bg-video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:-2;filter:brightness(0.5);}
+body::after{content:"";position:fixed;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:-1;}
+.container{width:95%;max-width:900px;background:rgba(10,10,30,0.65);backdrop-filter:blur(15px);padding:25px;border-radius:20px;box-shadow:0 0 30px rgba(0,255,200,0.2);}
+h1{text-align:center;color:#00ffd0;margin-bottom:15px;}
+input{width:100%;padding:12px;margin:6px 0;border-radius:10px;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.6);color:#fff;}
+.btn{width:100%;padding:12px;border:none;border-radius:30px;background:linear-gradient(45deg,#00ffd0,#7a2bff);color:#fff;cursor:pointer;margin-top:10px;font-weight:bold;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px;margin-top:20px;}
+.card{background:rgba(255,255,255,0.05);border-radius:15px;padding:10px;text-align:center;}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:10px;}
+.vote-btn{margin-top:8px;background:#00ffd0;color:#000;border:none;padding:8px;border-radius:20px;cursor:pointer;font-weight:bold;}
+.vote-btn:disabled{background:#555;color:#aaa;cursor:not-allowed;}
+</style>
+</head>
+
+<body>
+
+<video autoplay muted loop class="bg-video">
+  <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4" type="video/mp4">
+</video>
+
+<div class="container">
+  <h1>🐰 Galeria de Páscoa</h1>
+
+  <input type="text" id="nome" placeholder="Seu nome">
+  <input type="text" id="setor" placeholder="Seu setor">
+  <input type="text" id="empresa" placeholder="Sua empresa">
+  <input type="file" id="imagem">
+
+  <button class="btn" onclick="enviar()">Enviar Foto</button>
+
+  <div class="grid" id="galeria"></div>
+
+  <h1>🏆 Top 5</h1>
+  <div class="grid" id="ranking"></div>
+</div>
+
 <script>
 // ==========================================
-// CONFIGURAÇÃO DO SUPABASE
+// SUPABASE CONFIG (CORRETO)
 // ==========================================
 const SUPABASE_URL = 'https://gfakakiwalrinznneps.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24i';
 
-// Inicializa o cliente do Supabase
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Variáveis globais
 let dados = [];
 let votosUsuario = JSON.parse(localStorage.getItem('votosUsuarioPascoa')) || [];
 
 // ==========================================
-// FUNÇÕES PRINCIPAIS
+// CARREGAR
 // ==========================================
-
 async function carregarDados() {
-  try {
-    const { data, error } = await supabase
-      .from('galeria')
-      .select('*')
-      .order('created_at', { ascending: false });
+  const { data, error } = await supabase
+    .from('galeria')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    
-    dados = data;
-    render();
-  } catch (error) {
-    console.error('Erro ao carregar dados:', error);
-    alert('Erro ao carregar a galeria.');
+  if (error) {
+    console.error(error);
+    alert('Erro ao carregar');
+    return;
   }
+
+  dados = data;
+  render();
 }
 
+// ==========================================
+// ENVIAR FOTO
+// ==========================================
 async function enviar() {
-  const nome = document.getElementById('nome').value.trim();
-  const setor = document.getElementById('setor').value.trim();
-  const empresa = document.getElementById('empresa').value.trim();
+  const nome = document.getElementById('nome').value;
+  const setor = document.getElementById('setor').value;
+  const empresa = document.getElementById('empresa').value;
   const file = document.getElementById('imagem').files[0];
 
   if (!nome || !setor || !empresa || !file) {
-    alert('Preencha tudo!');
+    alert('Preencha tudo');
     return;
   }
 
   try {
-    const fileExt = file.name.split('.').pop();
-    const fileName = Date.now() + '.' + fileExt;
+    const fileName = Date.now() + '-' + file.name;
 
-    await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('fotos-pascoa')
-      .upload(fileName, file);
+      .upload(fileName, file, { upsert: false });
+
+    if (uploadError) throw uploadError;
 
     const { data } = supabase.storage
       .from('fotos-pascoa')
       .getPublicUrl(fileName);
 
-    await supabase.from('galeria').insert([
-      {
+    const { error: dbError } = await supabase
+      .from('galeria')
+      .insert([{
         nome,
         setor,
         empresa,
         img_url: data.publicUrl,
         votos: 0
-      }
-    ]);
+      }]);
 
-    alert('Enviado!');
+    if (dbError) throw dbError;
+
+    alert('Foto enviada!');
     carregarDados();
 
   } catch (err) {
@@ -75,16 +126,25 @@ async function enviar() {
   }
 }
 
+// ==========================================
+// VOTAR
+// ==========================================
 async function votar(id, votos) {
   if (votosUsuario.includes(id)) {
-    alert('Você já votou!');
+    alert('Você já votou');
     return;
   }
 
-  await supabase
+  const { error } = await supabase
     .from('galeria')
     .update({ votos: votos + 1 })
     .eq('id', id);
+
+  if (error) {
+    console.error(error);
+    alert('Erro ao votar');
+    return;
+  }
 
   votosUsuario.push(id);
   localStorage.setItem('votosUsuarioPascoa', JSON.stringify(votosUsuario));
@@ -95,7 +155,6 @@ async function votar(id, votos) {
 // ==========================================
 // RENDER
 // ==========================================
-
 function render() {
   const galeria = document.getElementById('galeria');
   galeria.innerHTML = '';
@@ -125,9 +184,7 @@ function renderRanking() {
   const ranking = document.getElementById('ranking');
   ranking.innerHTML = '';
 
-  const top = [...dados]
-    .sort((a,b)=>b.votos-a.votos)
-    .slice(0,5);
+  const top = [...dados].sort((a,b)=>b.votos-a.votos).slice(0,5);
 
   top.forEach((item, i) => {
     ranking.innerHTML += `
@@ -142,5 +199,7 @@ function renderRanking() {
 
 // INIT
 carregarDados();
-
 </script>
+
+</body>
+</html>
