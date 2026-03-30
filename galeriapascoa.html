@@ -63,8 +63,6 @@ let dados = [];
 let votosUsuario = [];
 
 async function enviar(){
-  console.log("clicou");
-
   const nome = document.getElementById('nome').value;
   const setor = document.getElementById('setor').value;
   const empresa = document.getElementById('empresa').value;
@@ -81,7 +79,11 @@ async function enviar(){
     const { error: uploadError } = await supabaseClient
       .storage
       .from('fotos-pascoa-gov')
-      .upload('public/' + fileName, file);
+      .upload('public/' + fileName, file, {
+        contentType: file.type,
+        cacheControl: '3600',
+        upsert: false
+      });
 
     if(uploadError){
       console.error(uploadError);
@@ -110,7 +112,7 @@ async function enviar(){
       return;
     }
 
-    alert("Enviado!");
+    alert("Enviado com sucesso!");
     carregarGaleria();
 
   } catch(err){
