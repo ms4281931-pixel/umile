@@ -143,7 +143,7 @@ input[type="file"]{
   <input type="text" id="setor" placeholder="Seu setor">
   <input type="text" id="empresa" placeholder="Sua empresa">
   <input type="file" id="imagem" accept="image/*">
-  <button class="btn" onclick="enviar()">Enviar Foto</button>
+  <button class="btn" id="btnEnviar">Enviar Foto</button>
 
   <div class="grid" id="galeria"></div>
 
@@ -153,10 +153,14 @@ input[type="file"]{
   </div>
 </div>
 
-<script>
+<script defer>
 // 🔥 CONFIG SUPABASE
 const SUPABASE_URL = "https://gfakakiwalrinnzsneps.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdmYWtha2l3YWxyaW5uenNuZXBzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4OTcxOTgsImV4cCI6MjA5MDQ3MzE5OH0.aLxukBEN-XBfNKqiSPWBQxOF2W7CRHhAroHOXXzmkYY";
+
+if (!window.supabase) {
+  alert("Erro ao carregar Supabase");
+}
 
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
@@ -225,6 +229,8 @@ async function enviar(){
     alert("Erro inesperado");
   }
 }
+
+document.getElementById("btnEnviar").addEventListener("click", enviar);
 
 async function carregarGaleria(){
   const { data, error } = await supabase
