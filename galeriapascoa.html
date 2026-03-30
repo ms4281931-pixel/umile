@@ -72,12 +72,12 @@ input[type="file"]{padding:6px;background:rgba(255,255,255,0.1);color:#fff;}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
-// Conexão Supabase atualizada
+// 1️⃣ Criar cliente Supabase primeiro
 const supabaseUrl = "https://aanbmpbhzheshifffxch.supabase.co";
 const supabaseKey = "sb_publishable_iAcJisqODlnbEGUW_X-jSA_An1_5toE";
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// Áudio
+// 2️⃣ Áudio
 const bgMusic = document.getElementById('bgMusic');
 const musicIcon = document.getElementById('musicIcon');
 function toggleMusic() {
@@ -85,7 +85,7 @@ function toggleMusic() {
     else{ bgMusic.pause(); musicIcon.innerText="🔇"; }
 }
 
-// Cadastro + Upload
+// 3️⃣ Cadastro + Upload
 const cadastroForm = document.getElementById('cadastroForm');
 cadastroForm.addEventListener('submit', async (e)=>{
     e.preventDefault();
@@ -105,7 +105,7 @@ cadastroForm.addEventListener('submit', async (e)=>{
     const { error: uploadErr } = await supabase.storage.from("photos").upload(fileName, foto, {upsert:true});
     if(uploadErr){ console.error(uploadErr); return alert("Erro ao enviar foto"); }
 
-    // URL pública
+    // URL pública correta
     const { data: { publicUrl } } = supabase.storage.from("photos").getPublicUrl(fileName);
 
     // Inserir foto na tabela
@@ -118,7 +118,7 @@ cadastroForm.addEventListener('submit', async (e)=>{
     loadGallery();
 });
 
-// Carregar galeria
+// 4️⃣ Carregar galeria
 async function loadGallery(){
     const gallery = document.getElementById('galleryGrid');
     gallery.innerHTML="";
@@ -126,7 +126,6 @@ async function loadGallery(){
     if(error){ console.error(error); return; }
 
     for(const photo of photos){
-        // Pegar dados do usuário
         const { data: userData } = await supabase.from("users").select("nome,setor,empresa").eq("id",photo.user_id).single();
         const votos = photo.votes ? photo.votes.length : 0;
         const card = document.createElement("div");
@@ -140,12 +139,11 @@ async function loadGallery(){
     }
 }
 
-// Votar em foto
+// 5️⃣ Votar em foto
 async function votePhoto(photoId){
     const user_name = prompt("Digite seu nome para votar");
     if(!user_name) return;
 
-    // Checar se já votou
     const { data: existing } = await supabase.from("votes").select("*").eq("user_name",user_name).eq("photo_id",photoId).single();
     if(existing) return alert("Você já votou nesta foto!");
 
@@ -153,7 +151,7 @@ async function votePhoto(photoId){
     loadGallery();
 }
 
-// Inicializar galeria
+// 6️⃣ Inicializar galeria
 loadGallery();
 </script>
 </body>
