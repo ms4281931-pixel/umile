@@ -4,9 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Concurso de Páscoa</title>
-
 <link rel="icon" type="image/png" href="https://i.ibb.co/sJk3rC10/freepik-preciso-dessa-imagem-em-png-sem-fundo-0001.png">
-
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
 body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow-x:hidden;position:relative;color:#fff;background:#0a0a1e;padding-top:30px;}
@@ -26,7 +24,7 @@ p{color:#ccc;margin-bottom:20px;}
 .vote-btn{position:absolute;top:10px;right:10px;background:linear-gradient(45deg,#7a2bff,#00ffd0);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-weight:bold;color:#fff;display:flex;align-items:center;justify-content:center;transition:0.3s;}
 .vote-btn:hover{transform:scale(1.2);box-shadow:0 0 10px #00ffd0;}
 .loader{width:40px;height:40px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid #00ffd0;border-radius:50%;animation:spin 1s linear infinite;margin:20px auto;}
-@keyframes spin{100%{transform:rotate(360deg);}}
+@keyframes spin{100%{transform:rotate(360deg);} }
 .audio-control{position:fixed;bottom:20px;right:20px;z-index:100;background:rgba(10,10,30,0.8);padding:10px;border-radius:50%;cursor:pointer;border:1px solid #00ffd0;display:flex;align-items:center;justify-content:center;}
 form{display:flex;flex-direction:column;gap:12px;margin-top:10px;}
 input, select{padding:12px;border-radius:12px;border:none;outline:none;font-size:1rem;}
@@ -35,12 +33,10 @@ input[type="file"]{padding:6px;background:rgba(255,255,255,0.1);color:#fff;}
 </head>
 <body>
 
-<!-- Vídeo de fundo -->
 <video autoplay muted loop playsinline class="bg-video">
   <source src="https://pikaso.cdnpk.net/private/production/3736007523/1d331a23-bf5a-41d2-9a4d-90cac23d30d8-0.mp4" type="video/mp4">
 </video>
 
-<!-- Áudio -->
 <audio id="bgMusic" loop>
   <source src="https://soundimage.org/wp-content/uploads/2014/10/Light-Years_v001.mp3" type="audio/mpeg">
 </audio>
@@ -65,19 +61,15 @@ input[type="file"]{padding:6px;background:rgba(255,255,255,0.1);color:#fff;}
 <!-- Etapa 2: Galeria -->
 <div class="container hidden" id="step2">
   <h1>📸 Galeria de Páscoa</h1>
-  <div class="grid" id="galleryGrid">
-    <!-- Fotos carregadas dinamicamente -->
-  </div>
+  <div class="grid" id="galleryGrid"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/supabase.min.js"></script>
 <script>
-// 1️⃣ Criar cliente Supabase primeiro
 const supabaseUrl = "https://aanbmpbhzheshifffxch.supabase.co";
 const supabaseKey = "sb_publishable_iAcJisqODlnbEGUW_X-jSA_An1_5toE";
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-// 2️⃣ Áudio
 const bgMusic = document.getElementById('bgMusic');
 const musicIcon = document.getElementById('musicIcon');
 function toggleMusic() {
@@ -85,73 +77,80 @@ function toggleMusic() {
     else{ bgMusic.pause(); musicIcon.innerText="🔇"; }
 }
 
-// 3️⃣ Cadastro + Upload
-const cadastroForm = document.getElementById('cadastroForm');
-cadastroForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    const nome = document.getElementById('nome').value;
-    const setor = document.getElementById('setor').value;
-    const empresa = document.getElementById('empresa').value;
-    const foto = document.getElementById('foto').files[0];
-    if(!foto) return alert("Selecione uma foto");
+// Cadastro + upload
+document.getElementById('cadastroForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const nome = document.getElementById('nome').value;
+  const setor = document.getElementById('setor').value;
+  const empresa = document.getElementById('empresa').value;
+  const foto = document.getElementById('foto').files[0];
+  if(!foto) return alert("Selecione uma foto");
 
-    // Criar usuário
-    const { data:user, error:userErr } = await supabase.from("users").insert([{ nome, setor, empresa }]).select().single();
-    if(userErr){ console.error(userErr); return alert("Erro ao cadastrar usuário"); }
+  // Inserir usuário
+  const { data:user, error:userErr } = await supabase.from("users").insert([{ nome,setor,empresa }]).select().single();
+  if(userErr){ console.error(userErr); return alert("Erro ao cadastrar usuário"); }
 
-    // Upload da foto
-    const fileExt = foto.name.split('.').pop();
-    const fileName = `${user.id}_${Date.now()}.${fileExt}`;
-    const { error: uploadErr } = await supabase.storage.from("photos").upload(fileName, foto, {upsert:true});
-    if(uploadErr){ console.error(uploadErr); return alert("Erro ao enviar foto"); }
+  // Upload foto
+  const fileExt = foto.name.split('.').pop();
+  const fileName = `${user.id}_${Date.now()}.${fileExt}`;
+  const { data: uploadData, error: uploadErr } = await supabase.storage.from("photos").upload(fileName, foto);
+  if(uploadErr){ console.error(uploadErr); return alert("Erro ao enviar foto"); }
 
-    // URL pública correta
-    const { data: { publicUrl } } = supabase.storage.from("photos").getPublicUrl(fileName);
+  // URL pública
+  const { data: { publicUrl } } = supabase.storage.from("photos").getPublicUrl(fileName);
 
-    // Inserir foto na tabela
-    const { data: photoData, error: photoErr } = await supabase.from("photos").insert([{ user_id: user.id, url: publicUrl }]);
-    if(photoErr){ console.error(photoErr); return alert("Erro ao salvar foto"); }
+  // Inserir na tabela photos
+  const { data: photoData, error: photoErr } = await supabase.from("photos").insert([{ user_id: user.id, url: publicUrl }]);
+  if(photoErr){ console.error(photoErr); return alert("Erro ao salvar foto"); }
 
-    alert("Foto enviada com sucesso!");
-    document.getElementById('step1').classList.add('hidden');
-    document.getElementById('step2').classList.remove('hidden');
-    loadGallery();
+  alert("Foto enviada com sucesso!");
+  document.getElementById('step1').classList.add('hidden');
+  document.getElementById('step2').classList.remove('hidden');
+  loadGallery();
 });
 
-// 4️⃣ Carregar galeria
+// Carregar galeria
 async function loadGallery(){
-    const gallery = document.getElementById('galleryGrid');
-    gallery.innerHTML="";
-    const { data: photos, error } = await supabase.from("photos").select("id,url,user_id,votes(id)").order("id",{ascending:false});
-    if(error){ console.error(error); return; }
+  const gallery = document.getElementById('galleryGrid');
+  gallery.innerHTML="";
+  const { data: photos, error } = await supabase.from("photos").select("id,url,user_id,votes(id)").order("id",{ascending:false});
+  if(error){ console.error(error); return; }
 
-    for(const photo of photos){
-        const { data: userData } = await supabase.from("users").select("nome,setor,empresa").eq("id",photo.user_id).single();
-        const votos = photo.votes ? photo.votes.length : 0;
-        const card = document.createElement("div");
-        card.className="photo-card";
-        card.innerHTML=`
-          <img src="${photo.url}" alt="Foto">
-          <div class="photo-info">${userData.nome} - ${userData.setor} (${votos} votos)</div>
-          <button class="vote-btn" onclick="votePhoto(${photo.id})">❤</button>
-        `;
-        gallery.appendChild(card);
-    }
+  for(const photo of photos){
+    const { data: userData } = await supabase.from("users").select("nome,setor,empresa").eq("id",photo.user_id).single();
+    const votes = photo.votes ? photo.votes.length : 0;
+    const card = document.createElement("div");
+    card.className="photo-card";
+    card.innerHTML = `
+      <img src="${photo.url}" alt="Foto">
+      <div class="photo-info">${userData.nome} - ${userData.setor} (${votes} votos)</div>
+      <button class="vote-btn" onclick="votePhoto(${photo.id})">❤</button>
+    `;
+    gallery.appendChild(card);
+  }
 }
 
-// 5️⃣ Votar em foto
+// Votar em foto
 async function votePhoto(photoId){
-    const user_name = prompt("Digite seu nome para votar");
-    if(!user_name) return;
-
-    const { data: existing } = await supabase.from("votes").select("*").eq("user_name",user_name).eq("photo_id",photoId).single();
-    if(existing) return alert("Você já votou nesta foto!");
-
-    await supabase.from("votes").insert([{ user_name, photo_id: photoId }]);
-    loadGallery();
+  const userId = prompt("Digite seu ID de usuário para votar (apenas números para teste)");
+  if(!userId) return;
+  const { data: existing } = await supabase.from("votes").select("*").eq("user_id",userId).eq("photo_id",photoId).single();
+  if(existing) return alert("Você já votou nesta foto!");
+  const { error } = await supabase.from("votes").insert([{ user_id:userId, photo_id:photoId }]);
+  if(error){ console.error(error); return alert("Erro ao registrar voto"); }
+  alert("Voto registrado!");
+  loadGallery();
 }
 
-// 6️⃣ Inicializar galeria
+// Ranking Top 5 (no console)
+async function showRanking(){
+  const { data: photos } = await supabase.from("photos").select("id,url,user_id,votes(id)");
+  const ranked = photos.map(p=>({ ...p, totalVotes: p.votes ? p.votes.length : 0 }))
+                       .sort((a,b)=>b.totalVotes-a.totalVotes)
+                       .slice(0,5);
+  console.log("Top 5 fotos:", ranked);
+}
+
 loadGallery();
 </script>
 </body>
